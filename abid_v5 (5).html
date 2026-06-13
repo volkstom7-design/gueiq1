@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>عبدالله مساعد </title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f5f5; font-family: 'Tajawal', sans-serif; direction: rtl; }
+    .page { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* ===== HERO ===== */
+    .hero { display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem; background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; margin-bottom: 2rem; }
+    .avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid #1D9E75; flex-shrink: 0; background: #f0f0f0; }
+    .avatar-initials { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #1D9E75; display: none; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; background: #E1F5EE; color: #085041; flex-shrink: 0; }
+    .hero-name { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .hero-title { font-size: 13px; color: #1D9E75; font-weight: 500; margin-bottom: 10px; }
+    .hero-bio { font-size: 13px; color: #666; line-height: 1.75; margin-bottom: 10px; }
+    .contact-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .contact-chip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #555; background: #f7f7f7; padding: 4px 10px; border-radius: 20px; border: 0.5px solid #e0e0e0; cursor: pointer; text-decoration: none; }
+    .contact-chip:hover { border-color: #1D9E75; }
+    .contact-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ===== SECTION LABEL ===== */
+    .section-label { font-size: 12px; font-weight: 500; color: #888; letter-spacing: 0.06em; margin-bottom: 1rem; text-transform: uppercase; }
+
+    /* ===== BOOKS ===== */
+    .books-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 2.5rem; }
+    .book-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; padding: 1.25rem 1rem; cursor: pointer; transition: border-color 0.2s, transform 0.15s; text-align: center; position: relative; overflow: hidden; }
+    .book-card:hover { border-color: #1D9E75; transform: translateY(-2px); }
+    .book-badge { display: inline-block; background: #E1F5EE; color: #085041; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-bottom: 0.75rem; }
+    .book-cover { width: 56px; height: 72px; border-radius: 4px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 700; box-shadow: 2px 4px 12px rgba(0,0,0,0.12); }
+    .book-title { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .book-sub { font-size: 12px; color: #888; }
+    .new-badge { position: absolute; top: 10px; right: 10px; background: #D85A30; color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+
+    /* ===== DIVIDER ===== */
+    .divider { height: 0.5px; background: #e5e5e5; margin-bottom: 2rem; }
+
+    /* ===== STAINS ===== */
+    .stains-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 2rem; }
+    .stain-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+    .stain-card:hover { border-color: #1D9E75; transform: translateY(-2px); }
+    .stain-img { width: 100%; height: 72px; object-fit: cover; display: block; }
+    .stain-img-placeholder { width: 100%; height: 72px; display: none; align-items: center; justify-content: center; font-size: 22px; }
+    .stain-body { padding: 8px 10px; text-align: center; }
+    .stain-name { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 1px; }
+    .stain-type { font-size: 11px; color: #888; }
+
+    /* ===== FILTERS ===== */
+    .filters-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 2.5rem; }
+    .filter-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    .filter-card:hover { border-color: #1D9E75; transform: translateY(-2px); }
+    .filter-img { width: 100%; height: 110px; object-fit: cover; display: block; }
+    .filter-img-placeholder { width: 100%; height: 110px; display: none; align-items: center; justify-content: center; font-size: 32px; background: #E1F5EE; }
+    .filter-body { padding: 10px 12px 12px; }
+    .filter-name { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 3px; }
+    .filter-desc { font-size: 12px; color: #888; line-height: 1.55; margin-bottom: 4px; }
+    @media (max-width: 520px) { .filters-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+    /* ===== COURSES ===== */
+    .courses-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 2.5rem; }
+    .course-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; padding: 1.25rem 1rem; cursor: pointer; transition: border-color 0.2s, transform 0.15s; text-align: center; position: relative; overflow: hidden; }
+    .course-card:hover { border-color: #1D9E75; transform: translateY(-2px); }
+    .course-icon { width: 56px; height: 56px; border-radius: 12px; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .course-badge { display: inline-block; background: #FFF3E0; color: #B45309; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-bottom: 0.5rem; }
+    .course-title { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .course-sub { font-size: 11px; color: #888; }
+
+    /* ===== MODAL ===== */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
+    .modal-backdrop.open { display: flex; }
+    .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem; width: 100%; max-width: 480px; animation: slideUp 0.25s ease; max-height: 90vh; overflow-y: auto; }
+    @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-handle { width: 40px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 1.25rem; }
+    .modal-badge-teal { display: inline-block; background: #E1F5EE; color: #085041; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; margin-bottom: 1rem; }
+    .modal-badge-blue { display: inline-block; background: #E6F1FB; color: #0C447C; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; margin-bottom: 1rem; }
+    .modal-badge-orange { display: inline-block; background: #FFF3E0; color: #B45309; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; margin-bottom: 1rem; }
+    .modal-title { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 0.5rem; }
+    .modal-desc { font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 1.25rem; }
+    .modal-img { width: 100%; max-height: 340px; object-fit: contain; border-radius: 12px; margin-bottom: 1.25rem; display: block; background: #f5f5f5; }
+    .modal-img-placeholder { width: 100%; height: 160px; border-radius: 12px; margin-bottom: 1.25rem; display: none; align-items: center; justify-content: center; font-size: 48px; background: #f5f5f5; }
+    .feature-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #666; margin-bottom: 8px; }
+    .feature-dot { width: 6px; height: 6px; border-radius: 50%; background: #1D9E75; margin-top: 6px; flex-shrink: 0; }
+    .order-form { background: #f7f7f7; border-radius: 12px; padding: 1.25rem; margin-top: 1.25rem; }
+    .order-form h3 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 1rem; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 9px 12px; font-size: 13px; font-family: 'Tajawal', sans-serif; border: 0.5px solid #ddd; border-radius: 8px; background: #fff; color: #111; outline: none; direction: rtl; }
+    .form-group input:focus, .form-group textarea:focus { border-color: #1D9E75; }
+    .btn-order { width: 100%; padding: 12px; background: #25D366; color: white; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-order:hover { background: #1ebe5d; }
+    .btn-order svg { width: 18px; height: 18px; }
+    .close-btn { float: left; background: #f0f0f0; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px; color: #666; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; }
+    .close-btn:hover { color: #111; }
+
+    /* ===== ADMIN BUTTON ===== */
+    .admin-fab { position: fixed; bottom: 24px; left: 24px; width: 44px; height: 44px; background: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 50; border: none; transition: transform 0.2s; }
+    .admin-fab:hover { transform: scale(1.08); }
+    .admin-fab svg { width: 20px; height: 20px; color: #fff; }
+
+    /* ===== ADMIN PANEL ===== */
+    .admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; }
+    .admin-overlay.open { display: block; }
+    .admin-panel { position: fixed; inset: 0; z-index: 201; display: none; flex-direction: column; }
+    .admin-panel.open { display: flex; }
+    .admin-inner { background: #f5f5f5; width: 100%; height: 100%; overflow-y: auto; }
+    .admin-header { background: #111; color: #fff; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .admin-header h1 { font-size: 16px; font-weight: 700; }
+    .admin-close { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+    .admin-tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e5e5; background: #fff; overflow-x: auto; }
+    .admin-tab { padding: 12px 18px; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-family: 'Tajawal', sans-serif; background: none; border-left: none; border-right: none; border-top: none; }
+    .admin-tab.active { color: #1D9E75; border-bottom-color: #1D9E75; }
+    .admin-body { padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
+    .admin-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .admin-card-title { font-size: 15px; font-weight: 700; color: #111; }
+    .btn-edit { background: #E1F5EE; color: #085041; border: none; border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+    .btn-delete { background: #FEE2E2; color: #B91C1C; border: none; border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Tajawal', sans-serif; margin-right: 6px; }
+    .btn-save { background: #1D9E75; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+    .btn-save:hover { background: #158a62; }
+    .btn-add { background: #111; color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; display: flex; align-items: center; gap: 6px; margin-bottom: 1.25rem; }
+    .btn-add:hover { background: #333; }
+    .admin-field { margin-bottom: 12px; }
+    .admin-field label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+    .admin-field input, .admin-field textarea, .admin-field select { width: 100%; padding: 9px 12px; font-size: 13px; font-family: 'Tajawal', sans-serif; border: 0.5px solid #ddd; border-radius: 8px; background: #fff; color: #111; outline: none; direction: rtl; }
+    .admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus { border-color: #1D9E75; }
+    .admin-field textarea { min-height: 80px; resize: vertical; }
+    .features-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+    .feature-row { display: flex; gap: 6px; align-items: center; }
+    .feature-row input { flex: 1; }
+    .btn-remove-feat { background: #FEE2E2; color: #B91C1C; border: none; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
+    .btn-add-feat { background: #f0f0f0; color: #555; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 12px; font-family: 'Tajawal', sans-serif; }
+    .collapse-body { display: none; }
+    .collapse-body.open { display: block; }
+    .color-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .admin-success { background: #E1F5EE; color: #085041; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 1rem; display: none; }
+    .admin-success.show { display: block; }
+
+    /* ===== LOGIN OVERLAY ===== */
+    .login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; display: none; align-items: center; justify-content: center; }
+    .login-overlay.open { display: flex; }
+    .login-box { background: #fff; border-radius: 20px; padding: 2rem; width: 320px; text-align: center; }
+    .login-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 0.5rem; }
+    .login-box p { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
+    .login-input { width: 100%; padding: 10px 14px; font-size: 14px; font-family: 'Tajawal', sans-serif; border: 0.5px solid #ddd; border-radius: 10px; outline: none; text-align: center; letter-spacing: 4px; margin-bottom: 12px; }
+    .login-input:focus { border-color: #1D9E75; }
+    .btn-login { width: 100%; padding: 12px; background: #111; color: #fff; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; }
+    .btn-login:hover { background: #333; }
+    .login-error { color: #B91C1C; font-size: 13px; margin-top: 8px; display: none; }
+    .login-error.show { display: block; }
+
+    /* ===== APP SECTION ===== */
+    .app-section { background: linear-gradient(135deg,#0d1f1a 0%,#0a2e22 60%,#064030 100%); border-radius: 20px; padding: 2rem 1.5rem; margin-bottom: 2.5rem; color: #fff; position: relative; overflow: hidden; }
+    .app-section::before { content:''; position:absolute; top:-40px; left:-40px; width:180px; height:180px; border-radius:50%; background:rgba(29,158,117,0.12); pointer-events:none; }
+    .app-section::after  { content:''; position:absolute; bottom:-30px; right:-30px; width:130px; height:130px; border-radius:50%; background:rgba(29,158,117,0.08); pointer-events:none; }
+    .app-label { font-size:11px; font-weight:600; letter-spacing:.08em; color:#1D9E75; margin-bottom:.5rem; text-transform:uppercase; }
+    .app-title { font-size:22px; font-weight:700; color:#fff; margin-bottom:.5rem; line-height:1.3; }
+    .app-sub   { font-size:13px; color:rgba(255,255,255,.6); margin-bottom:1.5rem; }
+    .app-features { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:1.75rem; }
+    .app-feat { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,.85); }
+    .app-feat-icon { width:32px; height:32px; border-radius:8px; background:rgba(29,158,117,0.2); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .app-btns { display:flex; gap:10px; flex-wrap:wrap; }
+    .app-btn { display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:12px; font-family:'Tajawal',sans-serif; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; border:none; transition:transform .15s,opacity .15s; }
+    .app-btn:hover { transform:translateY(-2px); opacity:.92; }
+    .app-btn-android { background:#fff; color:#111; }
+    .app-btn-ios     { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25); }
+    .app-btn svg { width:20px; height:20px; flex-shrink:0; }
+
+    @media (max-width: 520px) {
+      .hero { flex-direction: column; text-align: center; }
+      .books-grid { grid-template-columns: 1fr; }
+      .stains-grid { grid-template-columns: repeat(2, 1fr); }
+      .courses-grid { grid-template-columns: 1fr; }
+      .app-features { grid-template-columns: 1fr; }
+      .app-btns { flex-direction: column; }
+      .app-btn { justify-content: center; }
+    }
+
+    /* ===== USAGE GUIDE SLIDER ===== */
+    .guide-section { margin: 1.25rem 0; }
+    .guide-label { font-size: 13px; font-weight: 700; color: #085041; background: #E1F5EE; display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; margin-bottom: 12px; }
+    .guide-slider-wrap { position: relative; overflow: hidden; border-radius: 14px; background: #f7f7f7; }
+    .guide-slider-track { display: flex; flex-direction: row; transition: transform 0.32s cubic-bezier(.4,0,.2,1); will-change: transform; direction: ltr; }
+    .guide-slide { flex: 0 0 100%; width: 100%; min-width: 0; }
+    .guide-slide img { width: 100%; max-height: 280px; object-fit: contain; display: block; border-radius: 14px 14px 0 0; pointer-events: none; user-select: none; -webkit-user-drag: none; background: #f5f5f5; }
+    .guide-slide-caption { padding: 10px 14px 12px; font-size: 13px; color: #444; line-height: 1.65; text-align: center; background: #fff; border-radius: 0 0 14px 14px; border-top: 0.5px solid #eee; direction: rtl; }
+    .guide-slide-caption:empty { padding: 0; min-height: 0; }
+    .guide-nav { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; direction: ltr; }
+    .guide-btn { width: 34px; height: 34px; border-radius: 50%; border: 0.5px solid #ddd; background: #fff; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; flex-shrink: 0; }
+    .guide-btn:hover:not(:disabled) { background: #E1F5EE; border-color: #1D9E75; }
+    .guide-btn:disabled { opacity: 0.35; cursor: default; }
+    .guide-dots { display: flex; gap: 5px; align-items: center; }
+    .guide-dot { width: 7px; height: 7px; border-radius: 50%; background: #ddd; transition: background 0.2s, transform 0.2s; cursor: pointer; }
+    .guide-dot.active { background: #1D9E75; transform: scale(1.25); }
+    .guide-count { font-size: 12px; color: #999; min-width: 36px; text-align: center; }
+
+    /* ===== MICROSCOPE STANDS ===== */
+    .stands-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 2.5rem; }
+    .stand-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.15s; position: relative; }
+    .stand-card:hover { border-color: #1D9E75; transform: translateY(-2px); }
+    .stand-img { width: 100%; height: 110px; object-fit: cover; display: block; }
+    .stand-img-placeholder { width: 100%; height: 110px; display: none; align-items: center; justify-content: center; font-size: 32px; background: #E1F5EE; }
+    .stand-body { padding: 10px 12px 12px; }
+    .stand-name { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 3px; }
+    .stand-desc { font-size: 12px; color: #888; line-height: 1.55; margin-bottom: 4px; }
+    @media (max-width: 520px) { .stands-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+    /* ===== CLOUDINARY UPLOAD BUTTON ===== */
+    .upload-btn { display: inline-flex; align-items: center; gap: 6px; background: #f0f7ff; color: #1a5fa8; border: 1px solid #b3d1f7; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Tajawal', sans-serif; margin-top: 6px; transition: background 0.15s; }
+    .upload-btn:hover { background: #dbeafe; }
+    .upload-btn:disabled { opacity: 0.5; cursor: default; }
+    .upload-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .upload-preview { margin-top: 6px; display: none; }
+    .upload-preview img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+
+    /* ===== IMAGE FIELD WITH UPLOAD ===== */
+    .img-field-row { display: flex; gap: 6px; align-items: center; margin-top: 4px; }
+    .img-field-row input[type="text"] { flex: 1; min-width: 0; }
+    .img-field-row .upload-btn { flex-shrink: 0; margin-top: 0; white-space: nowrap; }
+
+    /* ===== VIDEO SLIDER ===== */
+    .video-section { margin-bottom: 2rem; }
+    .video-slider-wrap { position: relative; overflow: hidden; border-radius: 18px; }
+    .video-slider-track { display: flex; transition: transform 0.35s cubic-bezier(.4,0,.2,1); will-change: transform; direction: ltr; }
+    .video-slide { flex: 0 0 100%; width: 100%; min-width: 0; position: relative; cursor: pointer; }
+    .video-thumb-wrap { position: relative; width: 100%; padding-top: 56.25%; background: #111; border-radius: 18px; overflow: hidden; }
+    .video-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+    .video-slide:hover .video-thumb { transform: scale(1.03); }
+    .video-thumb-placeholder { position: absolute; inset: 0; background: linear-gradient(135deg,#0d1f1a,#0a2e22); display: flex; align-items: center; justify-content: center; font-size: 48px; }
+    .video-play-btn { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .video-play-circle { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(0,0,0,0.35); transition: transform 0.2s, background 0.2s; }
+    .video-slide:hover .video-play-circle { transform: scale(1.1); background: #fff; }
+    .video-play-circle svg { width: 26px; height: 26px; margin-right: -3px; }
+    .video-info { padding: 10px 4px 4px; }
+    .video-title { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
+    .video-sub { font-size: 12px; color: #888; }
+    .video-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 12px; }
+    .video-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid #ddd; background: #fff; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; flex-shrink: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .video-nav-btn:hover:not(:disabled) { background: #E1F5EE; border-color: #1D9E75; }
+    .video-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .video-dots { display: flex; gap: 6px; align-items: center; }
+    .video-dot { width: 7px; height: 7px; border-radius: 50%; background: #ddd; transition: background 0.2s, transform 0.2s; cursor: pointer; }
+    .video-dot.active { background: #1D9E75; transform: scale(1.3); }
+    .video-counter { font-size: 12px; color: #aaa; min-width: 36px; text-align: center; }
+
+    /* مودال الفيديو */
+    .video-modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
+    .video-modal-backdrop.open { display: flex; }
+    .video-modal-box { width: 100%; max-width: 700px; position: relative; }
+    .video-modal-close { position: absolute; top: -40px; left: 0; background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 8px; padding: 6px 14px; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+    .video-modal-close:hover { background: rgba(255,255,255,0.25); }
+    .video-iframe-wrap { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; background: #000; }
+    .video-iframe-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+    body.dark .video-title { color: #f0f0f0; }
+    body.dark .video-sub { color: #777; }
+    body.dark .video-nav-btn { background: #1a1a1a; border-color: #333; color: #ccc; }
+    body.dark .video-dot { background: #333; }
+
+    /* ===== PRICE TAG ===== */
+    .card-price {
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #1D9E75;
+      font-family: 'Tajawal', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== BOOK PREVIEW BUTTON ===== */
+    .btn-preview {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 11px 16px; margin-bottom: 12px;
+      background: linear-gradient(135deg, #1D9E75, #085041);
+      color: #fff; font-family: 'Tajawal', sans-serif;
+      font-size: 14px; font-weight: 700; border: none;
+      border-radius: 10px; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-preview:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-preview:active { transform: translateY(0); }
+
+    /* ===== BOOK PREVIEW MODAL ===== */
+    .preview-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.82); z-index: 500;
+      align-items: center; justify-content: center;
+      padding: 12px;
+    }
+    .preview-backdrop.open { display: flex; }
+
+    .preview-modal {
+      background: #1a1a1a; border-radius: 20px;
+      width: 100%; max-width: 780px;
+      max-height: 96vh; display: flex;
+      flex-direction: column; overflow: hidden;
+      animation: previewIn 0.28s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    @keyframes previewIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    /* Dark mode aware header */
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; background: #111; flex-shrink: 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .preview-header-title {
+      font-size: 14px; font-weight: 700; color: #e5e5e5;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .preview-close {
+      background: rgba(255,255,255,0.1); border: none;
+      border-radius: 50%; width: 34px; height: 34px;
+      color: #ccc; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .preview-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+    /* Book/PDF stage */
+    .preview-stage {
+      flex: 1; display: flex; align-items: stretch; justify-content: center;
+      padding: 12px; overflow: hidden; position: relative;
+      min-height: 65vh;
+    }
+
+    /* Loading spinner */
+    .preview-loading {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px; color: #888;
+      font-size: 13px; font-family: 'Tajawal', sans-serif;
+    }
+    .preview-spinner {
+      width: 40px; height: 40px; border: 3px solid #333;
+      border-top-color: #1D9E75; border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    .preview-empty {
+      display: none; flex-direction: column;
+      align-items: center; gap: 12px; color: #666;
+      font-size: 15px; font-family: 'Tajawal', sans-serif;
+      text-align: center;
+    }
+    .preview-empty-icon { font-size: 48px; }
+
+    /* StPageFlip wrapper — no pointer-events on images */
+    #book-container { position: relative; }
+    #book-container img {
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+    }
+
+    /* Footer: page counter + nav */
+    .preview-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 18px; background: #111;
+      border-top: 1px solid #2a2a2a; flex-shrink: 0;
+      gap: 10px;
+    }
+    .preview-nav {
+      display: flex; gap: 8px;
+    }
+    .preview-nav-btn {
+      background: rgba(255,255,255,0.08); border: none;
+      color: #ccc; border-radius: 8px; padding: 6px 14px;
+      font-family: 'Tajawal', sans-serif; font-size: 13px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .preview-nav-btn:hover { background: rgba(255,255,255,0.16); }
+    .preview-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .preview-page-info {
+      font-size: 13px; color: #888;
+      font-family: 'Tajawal', sans-serif;
+    }
+    .preview-page-info span { color: #1D9E75; font-weight: 700; }
+
+    /* Mobile adjustments */
+    @media (max-width: 520px) {
+      .preview-backdrop { padding: 0; align-items: flex-end; }
+      .preview-modal { border-radius: 20px 20px 0 0; max-height: 94vh; }
+      .preview-stage { padding: 8px; }
+    }
+    /* ===== DARK MODE TOGGLE BUTTON ===== */
+    .theme-toggle { position: fixed; bottom: 24px; left: 20px; z-index: 999; width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.15); transition: background 0.3s, transform 0.2s; }
+    .theme-toggle:hover { transform: scale(1.1); }
+    .theme-toggle:active { transform: scale(0.95); }
+
+    /* ===== DARK MODE ===== */
+    body.dark { background: #0f0f0f; }
+    body.dark .page { }
+    body.dark .hero { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .hero-name { color: #f0f0f0; }
+    body.dark .hero-bio { color: #aaa; }
+    body.dark .contact-chip { background: #2a2a2a; border-color: #3a3a3a; color: #ccc; }
+    body.dark .contact-chip:hover { border-color: #1D9E75; }
+    body.dark .section-label { color: #666; }
+    body.dark .divider { background: #2a2a2a; }
+
+    body.dark .book-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .book-card:hover { border-color: #1D9E75; }
+    body.dark .book-title { color: #f0f0f0; }
+    body.dark .book-sub { color: #777; }
+    body.dark .book-badge { background: #0d3028; color: #1D9E75; }
+
+    body.dark .stain-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .stain-card:hover { border-color: #1D9E75; }
+    body.dark .stain-name { color: #f0f0f0; }
+    body.dark .stain-type { color: #777; }
+
+    body.dark .filter-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .filter-card:hover { border-color: #1D9E75; }
+    body.dark .filter-name { color: #f0f0f0; }
+    body.dark .filter-desc { color: #777; }
+
+    body.dark .stand-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .stand-card:hover { border-color: #1D9E75; }
+    body.dark .stand-name { color: #f0f0f0; }
+    body.dark .stand-desc { color: #777; }
+    body.dark .stand-img-placeholder { background: #0d3028; }
+
+    body.dark .course-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .course-card:hover { border-color: #1D9E75; }
+    body.dark .course-title { color: #f0f0f0; }
+    body.dark .course-sub { color: #777; }
+    body.dark .course-desc { color: #aaa; }
+    body.dark .course-feat { color: #888; }
+
+    body.dark .app-card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .app-title { color: #f0f0f0; }
+    body.dark .app-sub { color: #aaa; }
+    body.dark .app-feat-label { color: #ccc; }
+
+    body.dark .modal-backdrop { background: rgba(0,0,0,0.85); }
+    body.dark .modal { background: #1a1a1a; }
+    body.dark .modal-handle { background: #333; }
+    body.dark .modal-title { color: #f0f0f0; }
+    body.dark .modal-desc { color: #aaa; }
+    body.dark .modal-close { color: #777; }
+    body.dark .modal-close:hover { color: #f0f0f0; }
+    body.dark .modal-badge-teal { background: #0d3028; color: #1D9E75; }
+    body.dark .modal-badge-blue { background: #0d1f3a; color: #5ba3e0; }
+    body.dark .modal-badge-orange { background: #2a1800; color: #f59e0b; }
+    body.dark .modal-img { background: #111; }
+    body.dark .feature-item { color: #aaa; }
+    body.dark .close-btn { background: #2a2a2a; color: #aaa; }
+    body.dark .close-btn:hover { color: #f0f0f0; }
+
+    body.dark .order-form { background: #111; }
+    body.dark .order-form h3 { color: #f0f0f0; }
+    body.dark .form-group label { color: #777; }
+    body.dark .form-group input,
+    body.dark .form-group textarea { background: #1a1a1a; border-color: #333; color: #f0f0f0; }
+    body.dark .form-group input::placeholder,
+    body.dark .form-group textarea::placeholder { color: #555; }
+    body.dark .order-input { background: #111; border-color: #333; color: #f0f0f0; }
+    body.dark .order-input::placeholder { color: #555; }
+
+    body.dark .guide-section { background: #111; border-color: #2a2a2a; }
+    body.dark .guide-label { background: #0d3028; color: #1D9E75; }
+    body.dark .guide-slide-caption { background: #1a1a1a; color: #888; border-top-color: #2a2a2a; }
+    body.dark .guide-slider-wrap { background: #111; }
+    body.dark .guide-btn { background: #2a2a2a; border-color: #333; color: #ccc; }
+    body.dark .guide-count { color: #666; }
+    body.dark .guide-dot { background: #333; }
+
+    body.dark .new-badge { background: #0d3028; color: #1D9E75; }
+    body.dark .card-price { color: #1D9E75; }
+
+    body.dark .theme-toggle { background: #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="تغيير المود">🌙</button>
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <img class="avatar" src="YOUR_PHOTO_URL_HERE"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+         alt="عبدالله مساعد " />
+    <div class="avatar-initials">أ ع</div>
+    <div style="flex:1;">
+      <div class="hero-name" id="hero-name" onclick="handleNameTap()" style="cursor:default;user-select:none;">عبدالله مساعد </div>
+      <div class="hero-title" id="hero-title">مؤلف ومدرب معتمد ومخترع عراقي</div>
+      <div class="hero-bio" id="hero-bio">متخصص في التشخيص المختبري. قدّم دورات تدريبية متقدمة في العلوم المختبرية، وساهم في تطوير مهارات الكوادر الطبية داخل وخارج العراق. صاحب أول ثلاثة كتب طبية حديثة على مستوى الوطن العربي.</div>
+      <div class="contact-row">
+        <div class="contact-chip" id="chip-phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012.08 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          <span id="phone-display">YOUR_PHONE_HERE</span>
+        </div>
+        <div class="contact-chip">
+          <svg viewBox="0 0 24 24" fill="#25D366" width="13" height="13">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.054 23.454a.75.75 0 00.918.918l5.598-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.524-5.186-1.437l-.372-.22-3.863 1.02 1.02-3.863-.22-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+          <span>واتساب</span>
+        </div>
+        <a class="contact-chip" id="chip-instagram" href="https://instagram.com/YOUR_INSTAGRAM_HERE" target="_blank" style="color:#C13584;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C13584" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="#C13584" stroke="none"/>
+          </svg>
+          <span id="instagram-display">YOUR_INSTAGRAM_HERE</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VIDEOS ===== -->
+  <div id="video-section-wrap"></div>
+
+  <!-- ===== COURSES ===== -->
+  <div class="section-label">الدورات المختبرية</div>
+  <div class="courses-grid" id="courses-grid"></div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider"></div>
+
+  <!-- ===== BOOKS ===== -->
+  <div class="section-label">الكتب المختبرية</div>
+  <div class="books-grid" id="books-grid"></div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider"></div>
+
+  <!-- ===== STAINS ===== -->
+  <div class="section-label">الصبغات المختبرية</div>
+  <div class="stains-grid" id="stains-grid"></div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider"></div>
+
+  <!-- ===== FILTERS ===== -->
+  <div class="section-label">الفلاتر المختبرية</div>
+  <div class="filters-grid" id="filters-grid"></div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider"></div>
+
+  <!-- ===== STANDS ===== -->
+  <div class="section-label">ستاند المجهر</div>
+  <div class="stands-grid" id="stands-grid"></div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="divider"></div>
+
+  <!-- ===== APP ===== -->
+  <div id="app-section-wrap"></div>
+
+</div>
+
+<!-- ===== VIDEO MODAL ===== -->
+<div class="video-modal-backdrop" id="video-modal-backdrop" onclick="closeVideoModal(event)">
+  <div class="video-modal-box">
+    <button class="video-modal-close" onclick="closeVideoModalBtn()">✕ إغلاق</button>
+    <div class="video-iframe-wrap" id="video-iframe-wrap"></div>
+  </div>
+</div>
+
+<!-- ===== BOOK PREVIEW MODAL ===== -->
+<div class="preview-backdrop" id="preview-backdrop" onclick="closePreviewIfBackdrop(event)">
+  <div class="preview-modal" id="preview-modal">
+    <div class="preview-header">
+      <div class="preview-header-title">
+        <span>📖</span>
+        <span id="preview-book-title">معاينة الكتاب</span>
+      </div>
+      <button class="preview-close" onclick="closePreview()" title="إغلاق">✕</button>
+    </div>
+    <div class="preview-stage" id="preview-stage">
+      <div class="preview-loading" id="preview-loading">
+        <div class="preview-spinner"></div>
+        <div>جاري تحميل الكتاب...</div>
+      </div>
+      <div class="preview-empty" id="preview-empty">
+        <div class="preview-empty-icon">📭</div>
+        <div>لا توجد معاينة متاحة حالياً</div>
+      </div>
+      <div id="book-container"></div>
+    </div>
+    <div class="preview-footer" id="preview-footer" style="display:none;">
+      <div class="preview-nav">
+        <button class="preview-nav-btn" id="btn-prev" onclick="previewPrev()">→ السابقة</button>
+        <button class="preview-nav-btn" id="btn-next" onclick="previewNext()">التالية ←</button>
+      </div>
+      <div class="preview-page-info" id="preview-page-info">
+        صفحة <span id="cur-page">1</span> من <span id="total-pages">1</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeIfBackdrop(event)">
+  <div class="modal" id="modal-box">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-handle"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN FAB (hidden) ===== -->
+
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div style="font-size:36px;margin-bottom:1rem;">🔐</div>
+    <h2>لوحة الإدارة</h2>
+    <p>أدخل كلمة المرور للوصول</p>
+    <input class="login-input" type="password" id="login-password" placeholder="••••••" onkeydown="if(event.key==='Enter')checkLogin()" />
+    <button class="btn-login" onclick="checkLogin()">دخول</button>
+    <div class="login-error" id="login-error">❌ كلمة المرور غير صحيحة</div>
+    <button onclick="closeAdminLogin()" style="background:none;border:none;color:#888;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;margin-top:12px;">إلغاء</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN OVERLAY ===== -->
+<div class="admin-overlay" id="admin-overlay" onclick="closeAdmin()"></div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-inner">
+    <div class="admin-header">
+      <h1>⚙️ لوحة الإدارة</h1>
+      <button class="admin-close" onclick="closeAdmin()">✕ إغلاق</button>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('profile')">الملف الشخصي</button>
+      <button class="admin-tab" onclick="switchTab('videos')">🎬 الفيديوهات</button>
+      <button class="admin-tab" onclick="switchTab('books')">الكتب</button>
+      <button class="admin-tab" onclick="switchTab('stains')">الصبغات</button>
+      <button class="admin-tab" onclick="switchTab('filters')">الفلاتر</button>
+      <button class="admin-tab" onclick="switchTab('stands')">ستاند المجهر</button>
+      <button class="admin-tab" onclick="switchTab('courses')">الدورات</button>
+      <button class="admin-tab" onclick="switchTab('app')">📱 التطبيق</button>
+    </div>
+    <div class="admin-body">
+
+      <!-- ===== TAB: PROFILE ===== -->
+      <div class="admin-section active" id="tab-profile">
+        <div class="admin-success" id="profile-success">✅ تم الحفظ بنجاح</div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title">البيانات الشخصية</div></div>
+          <div class="admin-field"><label>الاسم</label><input type="text" id="p-name" /></div>
+          <div class="admin-field"><label>اللقب / التخصص</label><input type="text" id="p-title" /></div>
+          <div class="admin-field"><label>النبذة التعريفية</label><textarea id="p-bio"></textarea></div>
+          <div class="admin-field"><label>رقم الهاتف</label><input type="text" id="p-phone" /></div>
+          <div class="admin-field"><label>رقم واتساب (مع رمز الدولة بدون +)</label><input type="text" id="p-whatsapp" placeholder="9647701234567" /></div>
+          <div class="admin-field"><label>رابط صورتك الشخصية</label>
+            <div class="img-field-row">
+              <input type="text" id="p-avatar" placeholder="https://..." oninput="previewAvatar()" />
+              <button id="upload-btn-p-avatar" class="upload-btn" onclick="triggerImgUpload('p-avatar','avatar-preview',function(url){document.getElementById('avatar-preview').style.display='block';document.getElementById('avatar-preview-img').src=url;})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+              </button>
+            </div>
+            <div id="avatar-preview" style="margin-top:8px;display:none;">
+              <img id="avatar-preview-img" src="" alt="معاينة" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #1D9E75;" onerror="this.parentElement.style.display='none'" />
+            </div>
+          </div>
+          <div class="admin-field"><label>انستغرام (اسم المستخدم)</label><input type="text" id="p-instagram" /></div>
+          <button class="btn-save" onclick="saveProfile()">💾 حفظ</button>
+        </div>
+      </div>
+
+      <!-- ===== TAB: VIDEOS ===== -->
+      <div class="admin-section" id="tab-videos">
+        <div class="admin-success" id="videos-success">✅ تم الحفظ بنجاح</div>
+        <div style="background:#E1F5EE;border-radius:10px;padding:10px 14px;font-size:12px;color:#085041;margin-bottom:1rem;">
+          💡 أضف رابط YouTube مثل: <span style="font-family:monospace;direction:ltr;display:inline-block;">https://www.youtube.com/watch?v=XXXXXXX</span>
+        </div>
+        <button class="btn-add" onclick="addVideo()">+ إضافة فيديو</button>
+        <div id="videos-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: BOOKS ===== -->
+      <div class="admin-section" id="tab-books">
+        <div class="admin-success" id="books-success">✅ تم الحفظ بنجاح</div>
+        <button class="btn-add" onclick="addBook()">+ إضافة كتاب جديد</button>
+        <div id="books-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: STAINS ===== -->
+      <div class="admin-section" id="tab-stains">
+        <div class="admin-success" id="stains-success">✅ تم الحفظ بنجاح</div>
+        <button class="btn-add" onclick="addStain()">+ إضافة صبغة جديدة</button>
+        <div id="stains-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: FILTERS ===== -->
+      <div class="admin-section" id="tab-filters">
+        <div class="admin-success" id="filters-success">✅ تم الحفظ بنجاح</div>
+        <button class="btn-add" onclick="addFilter()">+ إضافة فلتر جديد</button>
+        <div id="filters-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: STANDS ===== -->
+      <div class="admin-section" id="tab-stands">
+        <div class="admin-success" id="stands-success">✅ تم الحفظ بنجاح</div>
+        <button class="btn-add" onclick="addStand()">+ إضافة ستاند جديد</button>
+        <div id="stands-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: COURSES ===== -->
+      <div class="admin-section" id="tab-courses">
+        <div class="admin-success" id="courses-success">✅ تم الحفظ بنجاح</div>
+        <button class="btn-add" onclick="addCourse()">+ إضافة دورة جديدة</button>
+        <div id="courses-admin-list"></div>
+      </div>
+
+      <!-- ===== TAB: APP ===== -->
+      <div class="admin-section" id="tab-app">
+        <div class="admin-success" id="app-success">✅ تم الحفظ بنجاح</div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title">📱 إعدادات قسم التطبيق</div></div>
+          <div class="admin-field">
+            <label>إظهار القسم في الصفحة</label>
+            <select id="app-visible">
+              <option value="true">✅ ظاهر</option>
+              <option value="false">🚫 مخفي</option>
+            </select>
+          </div>
+          <div class="admin-field"><label>عنوان التطبيق</label><input type="text" id="app-title" /></div>
+          <div class="admin-field"><label>وصف مختصر</label><input type="text" id="app-sub" /></div>
+          <div class="admin-field">
+            <label>رابط Google Play (Android)</label>
+            <input type="text" id="app-android" placeholder="https://play.google.com/store/apps/..." />
+          </div>
+          <div class="admin-field">
+            <label>رابط App Store (iOS)</label>
+            <input type="text" id="app-ios" placeholder="https://apps.apple.com/..." />
+          </div>
+          <div class="admin-field">
+            <label>مميزات التطبيق (إيموجي + نص لكل ميزة)</label>
+            <div class="features-list" id="app-feats-list"></div>
+            <button class="btn-add-feat" onclick="addAppFeat()">+ إضافة ميزة</button>
+          </div>
+          <button class="btn-save" onclick="saveApp()" style="margin-top:8px;">💾 حفظ التطبيق</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// PASSWORD — مشفر بـ SHA-256
+// الباسورد الحالي: admin1234
+// لتغييره: استبدل الهاش أدناه بهاش SHA-256 الجديد
+// ============================================================
+const PASS_HASH = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3";
+// ============================================================
+
+// ===== DATA =====
+let DATA = {
+  profile: {
+    name: 'عبدالله مساعد',
+    title: 'مؤلف ومدرب معتمد ومخترع عراقي',
+    bio: 'متخصص في التشخيص المختبري. قدّم دورات تدريبية متقدمة في العلوم المختبرية، وساهم في تطوير مهارات الكوادر الطبية داخل وخارج العراق. صاحب أول ثلاثة كتب طبية حديثة على مستوى الوطن العربي.',
+    phone: 'YOUR_PHONE_HERE',
+    whatsapp: '9647XXXXXXXXX',
+    avatar: 'YOUR_PHOTO_URL_HERE',
+    instagram: 'YOUR_INSTAGRAM_HERE'
+  },
+  books: [
+    { id: 'GUE', key: 'GUE', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'GUE — General Urine Examination', sub: 'فحص البول العام', coverGrad: 'linear-gradient(135deg,#1D9E75,#085041)', desc: 'كتاب متخصص يغطي جميع جوانب فحص البول العام بأسلوب علمي حديث ومبسّط. يربط المفاهيم النظرية بالتطبيق العملي داخل المختبر.', features: ['تفسير شامل لنتائج فحص البول','ربط النتائج بالحالات السريرية','صور توضيحية ومخططات علمية'], isNew: true },
+    { id: 'GSE', key: 'GSE', badge: 'كتاب مختبري', badgeClass: 'modal-badge-blue', title: 'GSE — General Stool Examination', sub: 'فحص البراز العام', coverGrad: 'linear-gradient(135deg,#185FA5,#042C53)', desc: 'مرجع علمي شامل يتناول فحص البراز العام. يشرح الطرق الحديثة في التحليل وتمييز الطفيليات والبكتيريا وتفسير النتائج.', features: ['تغطية كاملة لأنواع الطفيليات المعوية','أساليب التلوين والفحص المجهري','إرشادات لجمع العينات وتخزينها'], isNew: true },
+    { id: 'CSF', key: 'CSF', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'CSF — Cerebrospinal Fluid Analysis', sub: 'السائل الدماغي الشوكي', coverGrad: 'linear-gradient(135deg,#D85A30,#4A1B0C)', desc: 'كتاب متخصص في تحليل السائل الدماغي الشوكي. يشرح التحليل الفيزيائي والكيميائي والمجهري ودوره في تشخيص أمراض الجهاز العصبي.', features: ['شرح الخصائص الفيزيائية للسائل','التحليل الكيميائي والخلوي المفصّل','التشخيص التفريقي لأمراض السحايا'], isNew: true }
+  ],
+  stains: [
+    { id: 'methylene_blue', name: 'Methylene Blue', type: 'أزرق', img: 'METHYLENE_BLUE_IMG_URL', emoji: '🔵', emojiBg: '#DBEAFE', desc: 'صبغة الميثيلين الزرقاء من أقدم وأكثر الصبغات المختبرية استخداماً. تُستخدم لتلوين المسحات والعينات المختبرية وإبراز التفاصيل الدقيقة في الفحص المجهري بدقة عالية.' },
+    { id: 'diff_quick', name: 'Diff Quick', type: 'صبغة سريعة', img: 'DIFF_QUICK_IMG_URL', emoji: '🧪', emojiBg: '#EDE9FE', desc: 'صبغة Diff Quick سريعة الاستخدام، مصممة للحصول على نتائج احترافية في وقت قياسي. تُستخدم على نطاق واسع في تلوين المسحات الدموية والمسحات المختبرية العامة.' },
+    { id: 'toludin', name: 'Toludin', type: 'صبغة مجهرية', img: 'TOLUDIN_IMG_URL', emoji: '🫐', emojiBg: '#BFDBFE', desc: 'صبغة التولويدين متعددة الاستخدامات، تُعطي تلويناً واضحاً ومميزاً لمكونات العينة المختلفة. مناسبة لأنواع متعددة من الفحوصات المجهرية في المختبرات الطبية.' },
+    { id: 'galaxia', name: 'Galaxia', type: 'صبغة مركّبة', img: 'GALAXIA_IMG_URL', emoji: '🌌', emojiBg: '#EDE9FE', desc: 'صبغة Galaxia تركيبة متطورة تجمع خصائص عدة صبغات في منتج واحد. توفر تلويناً عميقاً ومتوازناً يُسهّل تمييز التفاصيل الدقيقة وتُعطي صورة مجهرية احترافية.' }
+  ],
+  courses: [
+    { id: 'c1', title: 'دورة فحص البول المتقدم', sub: 'تشخيص ومختبر', icon: '🔬', iconBg: '#E1F5EE', desc: 'دورة شاملة تغطي جميع جوانب فحص البول من الناحية العملية والنظرية. مناسبة لأخصائيي المختبرات والطلاب.', features: ['الفحص الفيزيائي والكيميائي','تفسير النتائج المجهرية','حالات عملية وتشخيصية'], price: '', isNew: true },
+    { id: 'c2', title: 'دورة الطفيليات المعوية', sub: 'علم الطفيليات', icon: '🧫', iconBg: '#FFF3E0', desc: 'دورة متخصصة في تشخيص وتمييز الطفيليات المعوية بالفحص المجهري. مع تطبيقات عملية على عينات حقيقية.', features: ['تمييز أنواع الطفيليات','أساليب تحضير العينات','تفسير نتائج الفحص'], price: '', isNew: false }
+  ],
+  stands: [],
+  videos: [],
+  app: {
+    visible: true,
+    title: 'تطبيق عبدالله مساعد',
+    sub: 'تعلّم المختبرات الطبية بأسلوب تفاعلي حديث',
+    features: [
+      { icon: '🎬', label: 'دروس فيديو' },
+      { icon: '📝', label: 'اختبارات تفاعلية' },
+      { icon: '🏅', label: 'شهادات معتمدة' },
+      { icon: '📊', label: 'متابعة التقدم' }
+    ],
+    androidUrl: '',
+    iosUrl: ''
+  }
+};
+
+// ===== FIREBASE CONFIG =====
+// 🔧 ضع هنا بياناتك من Firebase Console
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyCOHTRwx3zGhSJ1GqjKSCUiqXA3coF1PV4",
+  authDomain:        "iq-lab-b2203.firebaseapp.com",
+  projectId:         "iq-lab-b2203",
+  storageBucket:     "iq-lab-b2203.firebasestorage.app",
+  messagingSenderId: "970197752307",
+  appId:             "1:970197752307:web:03c1af97b105a93209da86"
+};
+const DOC_PATH = "site/data"; // مسار الوثيقة في Firestore
+
+// ===== CLOUDINARY CONFIG =====
+// 🔧 ضع هنا بياناتك من Cloudinary Console
+const CLOUDINARY_CLOUD_NAME = "dbtakclzx";
+const CLOUDINARY_UPLOAD_PRESET = "tojibeinty";
+
+async function uploadToCloudinary(file, onSuccess) {
+  const btn = event && event.target;
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.secure_url) {
+      onSuccess(data.secure_url);
+    } else {
+      alert('❌ فشل الرفع: ' + (data.error?.message || 'خطأ غير معروف'));
+    }
+  } catch(e) {
+    alert('❌ خطأ في الاتصال بـ Cloudinary');
+  }
+  if (btn) { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع صورة'; }
+}
+
+function triggerImgUpload(inputId, previewId, afterUpload) {
+  const picker = document.createElement('input');
+  picker.type = 'file';
+  picker.accept = 'image/*';
+  picker.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const fakeEvent = { target: document.getElementById('upload-btn-' + inputId) };
+    // show spinner on button
+    const btn = document.getElementById('upload-btn-' + inputId);
+    if (btn) { btn.disabled = true; btn.innerHTML = '⏳ جاري الرفع...'; }
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.secure_url) {
+        const inputEl = document.getElementById(inputId);
+        if (inputEl) { inputEl.value = data.secure_url; inputEl.dispatchEvent(new Event('input')); }
+        const prevWrap = document.getElementById(previewId);
+        if (prevWrap) {
+          prevWrap.style.display = 'block';
+          const img = prevWrap.querySelector('img');
+          if (img) { img.src = data.secure_url; img.style.display = ''; }
+        }
+        if (afterUpload) afterUpload(data.secure_url);
+      } else {
+        alert('❌ فشل الرفع: ' + (data.error?.message || 'خطأ غير معروف'));
+      }
+    } catch(err) {
+      alert('❌ خطأ في الاتصال بـ Cloudinary');
+    }
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع صورة'; }
+  };
+  picker.click();
+}
+
+
+let db = null;
+let _firebaseReady = false;
+
+async function initFirebase() {
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getFirestore, doc, getDoc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const app = initializeApp(FIREBASE_CONFIG);
+    db = getFirestore(app);
+    window._fsDoc     = doc;
+    window._fsGetDoc  = getDoc;
+    window._fsSetDoc  = setDoc;
+    _firebaseReady = true;
+  } catch(e) {
+    console.warn("Firebase init failed, falling back to localStorage", e);
+  }
+}
+
+async function loadData() {
+  await initFirebase();
+  if (_firebaseReady) {
+    try {
+      const snap = await window._fsGetDoc(window._fsDoc(db, ...DOC_PATH.split("/")));
+      if (snap.exists()) {
+        const remote = snap.data();
+        DATA = { ...DATA, ...remote };
+        if (!DATA.stands) DATA.stands = [];
+        if (!DATA.videos) DATA.videos = [];
+      }
+      return;
+    } catch(e) { console.warn("Firestore read failed", e); }
+  }
+  // fallback: localStorage
+  const saved = localStorage.getItem('abid_data');
+  if (saved) { try { DATA = JSON.parse(saved); } catch(e) {} }
+  if (!DATA.stands) DATA.stands = [];
+  if (!DATA.videos) DATA.videos = [];
+}
+
+async function saveData() {
+  localStorage.setItem('abid_data', JSON.stringify(DATA)); // احتياطي دائماً
+  if (!_firebaseReady) return;
+  try {
+    await window._fsSetDoc(window._fsDoc(db, ...DOC_PATH.split("/")), DATA);
+  } catch(e) { console.warn("Firestore write failed", e); }
+}
+
+// ===== DARK MODE =====
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('abid_theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+}
+// تطبيق الثيم المحفوظ عند فتح الصفحة
+(function() {
+  const saved = localStorage.getItem('abid_theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = '☀️';
+    });
+  }
+})();
+
+// ===== HASH =====
+// Simple djb2 hash — works on file:// and https://
+function simpleHash(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
+    hash = hash >>> 0;
+  }
+  return hash.toString(16);
+}
+// Hash of "admin1234" via djb2
+const PASS_HASH_SIMPLE = "5fa11054";
+
+// ===== LOGIN =====
+function openAdminLogin() {
+  document.getElementById('login-overlay').classList.add('open');
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').classList.remove('show');
+  setTimeout(() => document.getElementById('login-password').focus(), 100);
+}
+function closeAdminLogin() { document.getElementById('login-overlay').classList.remove('open'); }
+function checkLogin() {
+  const pw = document.getElementById('login-password').value;
+  const h = simpleHash(pw);
+  if (h === PASS_HASH_SIMPLE) {
+    closeAdminLogin();
+    openAdmin();
+  } else {
+    document.getElementById('login-error').classList.add('show');
+    document.getElementById('login-password').value = '';
+  }
+}
+
+// ===== ADMIN =====
+function openAdmin() {
+  populateProfileForm();
+  renderBooksAdmin();
+  renderStainsAdmin();
+  renderCoursesAdmin();
+  document.getElementById('admin-overlay').classList.add('open');
+  document.getElementById('admin-panel').classList.add('open');
+}
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+  document.getElementById('admin-panel').classList.remove('open');
+}
+function switchTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'videos') renderVideosAdmin();
+  if (tab === 'books') renderBooksAdmin();
+  if (tab === 'stains') renderStainsAdmin();
+  if (tab === 'filters') renderFiltersAdmin();
+  if (tab === 'stands') renderStandsAdmin();
+  if (tab === 'courses') renderCoursesAdmin();
+  if (tab === 'app') populateAppForm();
+}
+function showSuccess(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ===== PROFILE =====
+function populateProfileForm() {
+  const p = DATA.profile;
+  document.getElementById('p-name').value = p.name;
+  document.getElementById('p-title').value = p.title;
+  document.getElementById('p-bio').value = p.bio;
+  document.getElementById('p-phone').value = p.phone;
+  document.getElementById('p-whatsapp').value = p.whatsapp;
+  document.getElementById('p-avatar').value = p.avatar;
+  document.getElementById('p-instagram').value = p.instagram;
+  // show avatar preview if URL exists
+  if (p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE') {
+    const wrap = document.getElementById('avatar-preview');
+    const img  = document.getElementById('avatar-preview-img');
+    if (wrap && img) { img.src = p.avatar; wrap.style.display = 'block'; }
+  }
+}
+async function saveProfile() {
+  DATA.profile.name = document.getElementById('p-name').value;
+  DATA.profile.title = document.getElementById('p-title').value;
+  DATA.profile.bio = document.getElementById('p-bio').value;
+  DATA.profile.phone = document.getElementById('p-phone').value;
+  DATA.profile.whatsapp = document.getElementById('p-whatsapp').value;
+  DATA.profile.avatar = document.getElementById('p-avatar').value;
+  DATA.profile.instagram = document.getElementById('p-instagram').value;
+  await saveData(); renderProfile();
+  showSuccess('profile-success');
+}
+
+// ===== RENDER MAIN PAGE =====
+function renderProfile() {
+  const p = DATA.profile;
+  const nameEl = document.getElementById('hero-name');
+  nameEl.textContent = p.name;
+  nameEl.onclick = handleNameTap;
+  document.getElementById('hero-title').textContent = p.title;
+  document.getElementById('hero-bio').textContent = p.bio;
+  document.getElementById('phone-display').textContent = p.phone;
+  document.getElementById('instagram-display').textContent = p.instagram;
+  document.getElementById('chip-instagram').href = 'https://instagram.com/' + p.instagram;
+
+  const av = document.querySelector('.avatar');
+  const initials = document.querySelector('.avatar-initials');
+  const hasAvatar = p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE' && p.avatar.trim() !== '';
+  if (hasAvatar) {
+    av.style.display = '';
+    initials.style.display = 'none';
+    av.onerror = function() {
+      av.style.display = 'none';
+      initials.style.display = 'flex';
+    };
+    av.src = p.avatar;
+  } else {
+    av.style.display = 'none';
+    initials.style.display = 'flex';
+  }
+}
+
+function renderBooks() {
+  const grid = document.getElementById('books-grid');
+  grid.innerHTML = DATA.books.map(b => `
+    <div class="book-card" onclick="openBook('${b.id}')">
+      ${b.isNew ? '<div class="new-badge">جديد</div>' : ''}
+      <div class="book-badge">${b.badge}</div>
+      ${b.img ? `<img src="${b.img}" alt="${b.title}" style="width:56px;height:72px;object-fit:cover;border-radius:4px;margin:0 auto 0.75rem;display:block;box-shadow:2px 4px 12px rgba(0,0,0,0.12);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="book-cover" style="background:${b.coverGrad};display:none;">${b.key||b.title.substring(0,3)}</div>` : `<div class="book-cover" style="background:${b.coverGrad};">${b.key||b.title.substring(0,3)}</div>`}
+      <div class="book-title">${b.title.split('—')[0].trim()}</div>
+      <div class="book-sub">${b.sub}</div>
+      ${b.price ? `<div class="card-price">${b.price}</div>` : ''}
+    </div>`).join('');
+}
+
+function renderStains() {
+  const grid = document.getElementById('stains-grid');
+  grid.innerHTML = DATA.stains.map(s => `
+    <div class="stain-card" onclick="openStain('${s.id}')">
+      <img class="stain-img" src="${s.img}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${s.name}" />
+      <div class="stain-img-placeholder" style="background:${s.emojiBg};">${s.emoji}</div>
+      <div class="stain-body">
+        <div class="stain-name">${s.name}</div>
+        <div class="stain-type">${s.type}</div>
+        ${s.price ? `<div class="card-price">${s.price}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function renderCourses() {
+  const grid = document.getElementById('courses-grid');
+  if (!DATA.courses || DATA.courses.length === 0) {
+    grid.innerHTML = '<div style="color:#aaa;font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">لا توجد دورات بعد</div>';
+    return;
+  }
+  grid.innerHTML = DATA.courses.map(c => `
+    <div class="course-card" onclick="openCourse('${c.id}')">
+      ${c.isNew ? '<div class="new-badge">جديد</div>' : ''}
+      ${c.img ? `<img src="${c.img}" alt="${c.title}" style="width:100%;height:90px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="course-icon" style="background:${c.iconBg};display:none;">${c.icon}</div>` : `<div class="course-icon" style="background:${c.iconBg};">${c.icon}</div>`}
+      <div class="course-badge">دورة مختبرية</div>
+      <div class="course-title">${c.title}</div>
+      <div class="course-sub">${c.sub}</div>
+      ${c.price ? `<div class="card-price">${c.price}</div>` : ''}
+    </div>`).join('');
+}
+
+// ===== VIDEOS =====
+function getYouTubeId(url) {
+  if (!url) return '';
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+function getYouTubeThumb(url) {
+  const id = getYouTubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+}
+
+let _videoIdx = 0;
+
+function renderVideos() {
+  if (!DATA.videos) DATA.videos = [];
+  const wrap = document.getElementById('video-section-wrap');
+  if (!wrap) return;
+  if (DATA.videos.length === 0) { wrap.innerHTML = ''; return; }
+
+  const slides = DATA.videos.map((v, i) => {
+    const thumb = getYouTubeThumb(v.url);
+    return `
+      <div class="video-slide" onclick="openVideoModal('${v.url}')">
+        <div class="video-thumb-wrap">
+          ${thumb
+            ? `<img class="video-thumb" src="${thumb}" alt="${v.title||''}" loading="lazy" />`
+            : `<div class="video-thumb-placeholder">🎬</div>`}
+          <div class="video-play-btn">
+            <div class="video-play-circle">
+              <svg viewBox="0 0 24 24" fill="#1D9E75"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
+        </div>
+        ${v.title ? `<div class="video-info"><div class="video-title">${v.title}</div>${v.sub?`<div class="video-sub">${v.sub}</div>`:''}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  const dots = DATA.videos.map((_, i) =>
+    `<div class="video-dot${i===0?' active':''}" onclick="_videoGoto(${i})"></div>`
+  ).join('');
+
+  wrap.innerHTML = `
+    <div class="video-section">
+      <div class="section-label">فيديوهات تعريفية</div>
+      <div class="video-slider-wrap" id="video-slider-wrap">
+        <div class="video-slider-track" id="video-slider-track">${slides}</div>
+      </div>
+      ${DATA.videos.length > 1 ? `
+      <div class="video-nav">
+        <button class="video-nav-btn" id="video-prev" onclick="_videoGoto(_videoIdx-1)">→</button>
+        <div class="video-dots" id="video-dots">${dots}</div>
+        <span class="video-counter" id="video-counter">1 / ${DATA.videos.length}</span>
+        <button class="video-nav-btn" id="video-next" onclick="_videoGoto(_videoIdx+1)">←</button>
+      </div>` : ''}
+    </div>
+    <div class="divider"></div>`;
+
+  _videoIdx = 0;
+  if (DATA.videos.length > 1) _videoInitTouch();
+}
+
+function _videoGoto(i) {
+  if (!DATA.videos || DATA.videos.length === 0) return;
+  const n = DATA.videos.length;
+  _videoIdx = Math.max(0, Math.min(n - 1, i));
+  const track = document.getElementById('video-slider-track');
+  if (track) track.style.transform = `translateX(${_videoIdx * -100}%)`;
+  document.querySelectorAll('.video-dot').forEach((d, j) => d.classList.toggle('active', j === _videoIdx));
+  const ctr = document.getElementById('video-counter');
+  if (ctr) ctr.textContent = `${_videoIdx + 1} / ${n}`;
+  const prev = document.getElementById('video-prev');
+  const next = document.getElementById('video-next');
+  if (prev) prev.disabled = _videoIdx === 0;
+  if (next) next.disabled = _videoIdx === n - 1;
+}
+
+function _videoInitTouch() {
+  const wrap = document.getElementById('video-slider-wrap');
+  if (!wrap) return;
+  let startX = 0, moved = false;
+  wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; moved = false; }, { passive: true });
+  wrap.addEventListener('touchmove', e => { moved = true; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    if (!moved) return;
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) _videoGoto(_videoIdx + (diff > 0 ? 1 : -1));
+  });
+}
+
+function openVideoModal(url) {
+  const id = getYouTubeId(url);
+  if (!id) return;
+  const wrap = document.getElementById('video-iframe-wrap');
+  wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allowfullscreen allow="autoplay"></iframe>`;
+  document.getElementById('video-modal-backdrop').classList.add('open');
+}
+
+function closeVideoModal(e) {
+  if (e.target === document.getElementById('video-modal-backdrop')) closeVideoModalBtn();
+}
+
+function closeVideoModalBtn() {
+  document.getElementById('video-modal-backdrop').classList.remove('open');
+  document.getElementById('video-iframe-wrap').innerHTML = '';
+}
+
+function renderVideosAdmin() {
+  if (!DATA.videos) DATA.videos = [];
+  document.getElementById('videos-admin-list').innerHTML = DATA.videos.length === 0
+    ? '<div style="color:#aaa;font-size:13px;text-align:center;padding:2rem;">لا توجد فيديوهات بعد</div>'
+    : DATA.videos.map((v, i) => `
+    <div class="admin-card" id="vid-card-${v.id}">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${v.title || 'فيديو ' + (i+1)}</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button onclick="moveVideo(${i},-1)" style="background:#f0f0f0;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:13px;" ${i===0?'disabled':''}>↑</button>
+          <button onclick="moveVideo(${i},1)" style="background:#f0f0f0;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:13px;" ${i===DATA.videos.length-1?'disabled':''}>↓</button>
+          <button class="btn-delete" onclick="deleteVideo('${v.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('vid-body-${v.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="vid-body-${v.id}">
+        <div class="admin-field"><label>رابط YouTube</label><input type="text" id="vid-url-${v.id}" value="${v.url||''}" placeholder="https://www.youtube.com/watch?v=..." style="direction:ltr;" /></div>
+        <div class="admin-field"><label>عنوان الفيديو</label><input type="text" id="vid-title-${v.id}" value="${v.title||''}" placeholder="مثال: مقدمة تعريفية" /></div>
+        <div class="admin-field"><label>وصف مختصر (اختياري)</label><input type="text" id="vid-sub-${v.id}" value="${v.sub||''}" placeholder="مثال: تعرف على عبدالله مساعد" /></div>
+        ${v.url ? `<div style="margin-bottom:10px;"><img src="${getYouTubeThumb(v.url)}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;border:1px solid #eee;" onerror="this.style.display='none'" /></div>` : ''}
+        <button class="btn-save" onclick="saveVideo('${v.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addVideo() {
+  if (!DATA.videos) DATA.videos = [];
+  const id = 'vid_' + Date.now();
+  DATA.videos.push({ id, url: '', title: '', sub: '' });
+  await saveData(); renderVideosAdmin(); renderVideos();
+  setTimeout(() => { const b = document.getElementById('vid-body-'+id); if(b) b.classList.add('open'); }, 100);
+}
+
+async function saveVideo(id) {
+  const v = DATA.videos.find(x => x.id === id);
+  if (!v) return;
+  v.url   = document.getElementById('vid-url-'+id).value.trim();
+  v.title = document.getElementById('vid-title-'+id).value.trim();
+  v.sub   = document.getElementById('vid-sub-'+id).value.trim();
+  await saveData(); renderVideos(); renderVideosAdmin(); showSuccess('videos-success');
+}
+
+async function deleteVideo(id) {
+  if (!confirm('حذف هذا الفيديو؟')) return;
+  DATA.videos = DATA.videos.filter(x => x.id !== id);
+  await saveData(); renderVideosAdmin(); renderVideos();
+}
+
+async function moveVideo(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= DATA.videos.length) return;
+  [DATA.videos[i], DATA.videos[j]] = [DATA.videos[j], DATA.videos[i]];
+  await saveData(); renderVideosAdmin(); renderVideos();
+}
+
+// ===== STANDS =====
+function renderStands() {
+  if (!DATA.stands) DATA.stands = [];
+  const grid = document.getElementById('stands-grid');
+  if (!grid) return;
+  if (DATA.stands.length === 0) {
+    grid.innerHTML = '<div style="color:#aaa;font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">لا توجد ستاندات بعد</div>';
+    return;
+  }
+  grid.innerHTML = DATA.stands.map(st => `
+    <div class="stand-card" onclick="openStand('${st.id}')">
+      ${st.isNew ? '<div class="new-badge">جديد</div>' : ''}
+      ${st.img ? `<img class="stand-img" src="${st.img}" alt="${st.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="stand-img-placeholder" style="display:none;">🔭</div>` : `<div class="stand-img-placeholder" style="display:flex;">🔭</div>`}
+      <div class="stand-body">
+        <div class="stand-name">${st.name}</div>
+        <div class="stand-desc">${st.desc}</div>
+        ${st.price ? `<div class="card-price">${st.price}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function openStand(id) {
+  const st = DATA.stands.find(x => x.id === id);
+  if (!st) return;
+  let guideHtml = '';
+  const steps = (st.guideSteps || []).filter(s => s.img);
+  if (steps.length) {
+    const slides = steps.map((s, i) => `
+      <div class="guide-slide">
+        <img src="${s.img}" alt="خطوة ${i+1}" onerror="this.style.display='none'" oncontextmenu="return false" draggable="false"/>
+        <div class="guide-slide-caption">${s.caption || ''}</div>
+      </div>`).join('');
+    const dots = steps.map((_, i) => `<div class="guide-dot${i===0?' active':''}" onclick="_guideTo('stand-guide',${i})"></div>`).join('');
+    guideHtml = `
+      <div class="guide-section">
+        <div class="guide-label">📸 دليل الاستخدام المصور</div>
+        <div class="guide-slider-wrap" id="stand-guide-wrap">
+          <div class="guide-slider-track" id="stand-guide-track">${slides}</div>
+        </div>
+        <div class="guide-nav">
+          <button class="guide-btn" id="stand-guide-prev" onclick="_guidePrev('stand-guide')" ${steps.length<=1?'disabled':''}>→</button>
+          <div class="guide-dots" id="stand-guide-dots">${dots}</div>
+          <span class="guide-count" id="stand-guide-count">1 / ${steps.length}</span>
+          <button class="guide-btn" id="stand-guide-next" onclick="_guideNext('stand-guide')" ${steps.length<=1?'disabled':''}>←</button>
+        </div>
+      </div>`;
+  }
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-badge-teal">🔭 ستاند المجهر</div>
+    <div class="modal-title">${st.name}</div>
+    ${st.img ? `<img class="modal-img" src="${st.img}" alt="${st.name}" onerror="this.style.display='none';" />` : ''}
+    <div class="modal-desc">${st.desc}</div>
+    ${guideHtml}
+    ${st.price ? `<div style="font-size:20px;font-weight:800;color:#1D9E75;margin:12px 0;">${st.price}</div>` : ''}
+    ${buildOrderForm(st.name)}`;
+  document.getElementById('modal-backdrop').classList.add('open');
+  if (steps.length > 1) _guideInitTouch('stand-guide', steps.length);
+}
+
+function renderStandsAdmin() {
+  if (!DATA.stands) DATA.stands = [];
+  document.getElementById('stands-admin-list').innerHTML = DATA.stands.map((st) => `
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${st.name}</div>
+        <div>
+          <button class="btn-delete" onclick="deleteStand('${st.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('stand-body-${st.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="stand-body-${st.id}">
+        <div class="admin-field"><label>الاسم</label><input type="text" id="stnd-n-${st.id}" value="${st.name}" /></div>
+        <div class="admin-field"><label>الوصف</label><textarea id="stnd-d-${st.id}">${st.desc||''}</textarea></div>
+        <div class="admin-field"><label>💰 السعر (اختياري)</label><input type="text" id="stnd-pr-${st.id}" value="${st.price||''}" placeholder="مثال: 35,000 د.ع" /></div>
+        <div class="admin-field">
+          <label>رابط الصورة</label>
+          <div class="img-field-row">
+            <input type="text" id="stnd-i-${st.id}" value="${st.img||''}" placeholder="https://..." oninput="previewStandImg('${st.id}')" />
+            <button id="upload-btn-stnd-i-${st.id}" class="upload-btn" onclick="triggerImgUpload('stnd-i-${st.id}','stnd-ipreview-${st.id}',null)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+            </button>
+          </div>
+          <div id="stnd-ipreview-${st.id}" class="upload-preview" style="${st.img?'display:block;':''}">
+            <img src="${st.img||''}" alt="معاينة" onerror="this.style.display='none'" />
+          </div>
+        </div>
+        <div class="admin-field">
+          <label>📸 دليل الاستخدام المصور</label>
+          <div class="features-list" id="stnd-guide-${st.id}">
+            ${(st.guideSteps||[]).map((s,gi) => `
+              <div class="feature-row" id="stnd-guide-row-${st.id}-${gi}" style="flex-direction:column;align-items:stretch;gap:4px;background:#f9f9f9;padding:8px;border-radius:8px;border:0.5px solid #eee;">
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="font-size:11px;color:#aaa;min-width:20px;">خ${gi+1}</span>
+                  <input type="text" id="stnd-gs-img-${st.id}-${gi}" value="${s.img||''}" placeholder="رابط صورة الخطوة..." style="flex:1;font-size:12px;direction:ltr;" />
+                  <button class="upload-btn" style="padding:4px 8px;margin-top:0;" onclick="triggerImgUpload('stnd-gs-img-${st.id}-${gi}',null,null)">↑</button>
+                  <button class="btn-remove-feat" onclick="removeStandGuideStep('${st.id}',${gi})">✕</button>
+                </div>
+                <input type="text" id="stnd-gs-cap-${st.id}-${gi}" value="${s.caption||''}" placeholder="وصف الخطوة..." style="font-size:12px;" />
+              </div>`).join('')}
+          </div>
+          <button class="btn-add-feat" style="margin-top:6px;" onclick="addStandGuideStep('${st.id}')">+ إضافة خطوة</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <input type="checkbox" id="stnd-new-${st.id}" ${st.isNew?'checked':''} />
+          <label for="stnd-new-${st.id}" style="font-size:13px;color:#555;">عرض شارة "جديد"</label>
+        </div>
+        <button class="btn-save" style="margin-top:12px;" onclick="saveStand('${st.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addStand() {
+  if (!DATA.stands) DATA.stands = [];
+  const id = 'stand_' + Date.now();
+  DATA.stands.push({ id, name: 'ستاند جديد', desc: '', price: '', img: '', isNew: true, guideSteps: [] });
+  await saveData(); renderStandsAdmin(); renderStands();
+  setTimeout(() => { document.getElementById('stand-body-'+id) && document.getElementById('stand-body-'+id).classList.add('open'); }, 100);
+}
+
+async function saveStand(id) {
+  const st = DATA.stands.find(x => x.id === id);
+  if (!st) return;
+  st.name  = document.getElementById('stnd-n-'+id).value;
+  st.desc  = document.getElementById('stnd-d-'+id).value;
+  st.price = (document.getElementById('stnd-pr-'+id) ? document.getElementById('stnd-pr-'+id).value : '').trim();
+  st.img   = document.getElementById('stnd-i-'+id).value.trim();
+  st.isNew = document.getElementById('stnd-new-'+id).checked;
+  st.guideSteps = [];
+  let gi = 0;
+  while (document.getElementById('stnd-gs-img-'+id+'-'+gi)) {
+    const img = document.getElementById('stnd-gs-img-'+id+'-'+gi).value.trim();
+    const caption = document.getElementById('stnd-gs-cap-'+id+'-'+gi).value.trim();
+    if (img) st.guideSteps.push({ img, caption });
+    gi++;
+  }
+  await saveData(); renderStands(); renderStandsAdmin(); showSuccess('stands-success');
+}
+
+async function deleteStand(id) {
+  if (!confirm('هل تريد حذف هذا الستاند؟')) return;
+  DATA.stands = DATA.stands.filter(x => x.id !== id);
+  await saveData(); renderStandsAdmin(); renderStands();
+}
+
+async function addStandGuideStep(standId) {
+  const st = DATA.stands.find(x => x.id === standId);
+  if (!st) return;
+  if (!st.guideSteps) st.guideSteps = [];
+  st.guideSteps.push({ img: '', caption: '' });
+  await saveData(); renderStandsAdmin();
+  const body = document.getElementById('stand-body-'+standId);
+  if (body) body.classList.add('open');
+}
+
+async function removeStandGuideStep(standId, gi) {
+  const st = DATA.stands.find(x => x.id === standId);
+  if (!st || !st.guideSteps) return;
+  st.guideSteps.splice(gi, 1);
+  await saveData(); renderStandsAdmin();
+  const body = document.getElementById('stand-body-'+standId);
+  if (body) body.classList.add('open');
+}
+
+function previewStandImg(id) {
+  const url = document.getElementById('stnd-i-'+id).value.trim();
+  const wrap = document.getElementById('stnd-ipreview-'+id);
+  if (wrap) {
+    if (url) { wrap.style.display = 'block'; const img = wrap.querySelector('img'); if(img){img.src=url;img.style.display='';} }
+    else { wrap.style.display = 'none'; }
+  }
+}
+
+// ===== FILTERS =====
+function renderFilters() {
+  if (!DATA.filters) DATA.filters = [];
+  const grid = document.getElementById('filters-grid');
+  if (!grid) return;
+  if (DATA.filters.length === 0) {
+    grid.innerHTML = '<div style="color:#aaa;font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">لا توجد فلاتر بعد</div>';
+    return;
+  }
+  grid.innerHTML = DATA.filters.map(f => `
+    <div class="filter-card" onclick="openFilter('${f.id}')">
+      ${f.isNew ? '<div class="new-badge">جديد</div>' : ''}
+      ${f.img ? `<img class="filter-img" src="${f.img}" alt="${f.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="filter-img-placeholder" style="display:none;">🔬</div>` : `<div class="filter-img-placeholder" style="display:flex;">🔬</div>`}
+      <div class="filter-body">
+        <div class="filter-name">${f.name}</div>
+        <div class="filter-desc">${f.desc}</div>
+        ${f.price ? `<div class="card-price">${f.price}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function renderFiltersAdmin() {
+  if (!DATA.filters) DATA.filters = [];
+  document.getElementById('filters-admin-list').innerHTML = DATA.filters.map(f => `
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${f.name}</div>
+        <div>
+          <button class="btn-delete" onclick="deleteFilter('${f.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('filter-body-${f.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="filter-body-${f.id}">
+        <div class="admin-field"><label>اسم الفلتر</label><input type="text" id="fn-${f.id}" value="${f.name}" /></div>
+        <div class="admin-field"><label>الوصف</label><textarea id="fd-${f.id}">${f.desc||''}</textarea></div>
+        <div class="admin-field"><label>💰 السعر (اختياري)</label><input type="text" id="fpr-${f.id}" value="${f.price||''}" placeholder="مثال: 10,000 د.ع" /></div>
+        <div class="admin-field"><label>رابط الصورة</label>
+          <div class="img-field-row">
+            <input type="text" id="fi-${f.id}" value="${f.img||''}" placeholder="https://..." />
+            <button id="upload-btn-fi-${f.id}" class="upload-btn" onclick="triggerImgUpload('fi-${f.id}',null,null)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+            </button>
+          </div>
+        </div>
+        <div class="admin-field"><label>📄 رابط PDF المعاينة (اختياري)</label><input type="text" id="fpdf-${f.id}" value="${f.previewPdf||''}" placeholder="https://drive.google.com/file/d/.../preview" style="direction:ltr;font-size:12px;" /></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <input type="checkbox" id="fnew-${f.id}" ${f.isNew?'checked':''} />
+          <label for="fnew-${f.id}" style="font-size:13px;color:#555;">عرض شارة "جديد"</label>
+        </div>
+        <button class="btn-save" style="margin-top:12px;" onclick="saveFilter('${f.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addFilter() {
+  if (!DATA.filters) DATA.filters = [];
+  const id = 'filter_' + Date.now();
+  DATA.filters.push({ id, name: 'فلتر جديد', desc: '', price: '', img: '', previewPdf: '', isNew: true });
+  await saveData(); renderFiltersAdmin(); renderFilters();
+  setTimeout(() => { document.getElementById('filter-body-'+id) && document.getElementById('filter-body-'+id).classList.add('open'); }, 100);
+}
+
+async function saveFilter(id) {
+  const f = DATA.filters.find(x => x.id === id);
+  if (!f) return;
+  f.name       = document.getElementById('fn-'+id).value;
+  f.desc       = document.getElementById('fd-'+id).value;
+  f.price      = document.getElementById('fpr-'+id).value.trim();
+  f.img        = document.getElementById('fi-'+id).value.trim();
+  f.previewPdf = document.getElementById('fpdf-'+id).value.trim();
+  f.isNew      = document.getElementById('fnew-'+id).checked;
+  await saveData(); renderFilters(); renderFiltersAdmin(); showSuccess('filters-success');
+}
+
+async function deleteFilter(id) {
+  if (!confirm('هل تريد حذف هذا الفلتر؟')) return;
+  DATA.filters = DATA.filters.filter(x => x.id !== id);
+  await saveData(); renderFiltersAdmin(); renderFilters();
+}
+
+function openFilter(id) {
+  const f = DATA.filters.find(x => x.id === id);
+  if (!f) return;
+  document.getElementById('modal-content').innerHTML = `
+    <div class="book-badge" style="margin-bottom:0.75rem;">🔬 فلتر مختبري</div>
+    <div class="modal-title">${f.name}</div>
+    ${f.img ? `<img class="modal-img" src="${f.img}" alt="${f.name}" onerror="this.style.display='none';" />` : ''}
+    <div class="modal-desc">${f.desc}</div>
+    ${f.price ? `<div style="font-size:20px;font-weight:800;color:#1D9E75;margin:12px 0;">${f.price}</div>` : ''}
+    ${f.previewPdf ? `<button class="btn-preview" style="margin-bottom:12px;" onclick="openPreviewDirect_filter('${f.id}')">📄 معاينة الفلتر</button>` : ''}
+    ${buildOrderForm(f.name)}`;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function openPreviewDirect_filter(filterId) {
+  const f = DATA.filters.find(x => x.id === filterId);
+  if (!f) return;
+  openPreviewPdf(f.previewPdf || '', f.name);
+}
+
+// ===== MODAL OPENERS =====
+function openBook(id) {
+  const b = DATA.books.find(x => x.id === id);
+  if (!b) return;
+  const feats = (b.features||[]).map(f => `<div class="feature-item"><div class="feature-dot"></div><span>${f}</span></div>`).join('');
+  const hasPreview = b.previewPages && b.previewPages.length > 0;
+  document.getElementById('modal-content').innerHTML = `
+    <div class="${b.badgeClass}">${b.badge}</div>
+    <div class="modal-title">${b.title}</div>
+    ${b.img ? `<img class="modal-img" src="${b.img}" alt="${b.title}" onerror="this.style.display='none';" />` : ''}
+    <div class="modal-desc">${b.desc}</div>
+    <div style="margin-bottom:1.25rem;">${feats}</div>
+    <button class="btn-preview" onclick="openPreviewDirect('${b.id}')">
+      📖 تصفح عينة الكتاب
+    </button>
+    ${buildOrderForm(b.title)}`;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function openStain(id) {
+  const s = DATA.stains.find(x => x.id === id);
+  if (!s) return;
+
+  // Build usage guide section if steps exist
+  let guideHtml = '';
+  const steps = (s.guideSteps || []).filter(st => st.img);
+  if (steps.length) {
+    const slides = steps.map((st, i) => `
+      <div class="guide-slide">
+        <img src="${st.img}" alt="خطوة ${i+1}"
+          onerror="this.style.display='none'"
+          oncontextmenu="return false" draggable="false"/>
+        <div class="guide-slide-caption">${st.caption || ''}</div>
+      </div>`).join('');
+    const dots = steps.map((_, i) => `<div class="guide-dot${i===0?' active':''}" onclick="_guideTo('stain-guide',${i})"></div>`).join('');
+    guideHtml = `
+      <div class="guide-section">
+        <div class="guide-label">📸 دليل الاستخدام المصور</div>
+        <div class="guide-slider-wrap" id="stain-guide-wrap">
+          <div class="guide-slider-track" id="stain-guide-track">${slides}</div>
+        </div>
+        <div class="guide-nav">
+          <button class="guide-btn" id="stain-guide-prev" onclick="_guidePrev('stain-guide')" ${steps.length<=1?'disabled':''}>→</button>
+          <div class="guide-dots" id="stain-guide-dots">${dots}</div>
+          <span class="guide-count" id="stain-guide-count">1 / ${steps.length}</span>
+          <button class="guide-btn" id="stain-guide-next" onclick="_guideNext('stain-guide')" ${steps.length<=1?'disabled':''}>←</button>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-badge-blue">صبغة مختبرية</div>
+    <div class="modal-title">${s.name}</div>
+    <img class="modal-img" src="${s.img}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${s.name}" />
+    <div class="modal-img-placeholder" style="background:${s.emojiBg};">${s.emoji}</div>
+    <div class="modal-desc">${s.desc}</div>
+    ${guideHtml}
+    ${buildOrderForm(s.name)}`;
+  document.getElementById('modal-backdrop').classList.add('open');
+
+  // Init swipe touch on guide
+  if (steps.length > 1) _guideInitTouch('stain-guide', steps.length);
+}
+
+function openCourse(id) {
+  const c = DATA.courses.find(x => x.id === id);
+  if (!c) return;
+  const feats = (c.features||[]).map(f => `<div class="feature-item"><div class="feature-dot"></div><span>${f}</span></div>`).join('');
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-badge-orange">دورة مختبرية</div>
+    <div class="modal-title">${c.title}</div>
+    ${c.img ? `<img class="modal-img" src="${c.img}" alt="${c.title}" onerror="this.style.display='none';" />` : ''}
+    <div class="modal-desc">${c.desc}</div>
+    <div style="margin-bottom:1.25rem;">${feats}</div>
+    ${c.price ? `<div style="font-size:16px;font-weight:700;color:#1D9E75;margin-bottom:1rem;">السعر: ${c.price}</div>` : ''}
+    ${buildOrderForm('التسجيل في: ' + c.title)}`;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+// ===== ORDER FORM =====
+function buildOrderForm(itemName) {
+  const safe = itemName.replace(/'/g, "\\'");
+  return `
+    <div class="order-form">
+      <h3>اطلب الآن</h3>
+      <div class="form-group"><label>اسمك الكريم</label><input type="text" id="f-name" placeholder="عبد الرحمن علي..." /></div>
+      <div class="form-group"><label>عنوانك (المحافظة / المنطقة)</label><input type="text" id="f-addr" placeholder="بغداد - الكرخ..." /></div>
+      <div class="form-group"><label>رقم هاتفك</label><input type="tel" id="f-phone" placeholder="07xxxxxxxxx" /></div>
+      <button class="btn-order" onclick="sendWhatsapp('${safe}')">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.054 23.454a.75.75 0 00.918.918l5.598-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.524-5.186-1.437l-.372-.22-3.863 1.02 1.02-3.863-.22-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        إرسال الطلب عبر واتساب
+      </button>
+    </div>`;
+}
+
+function sendWhatsapp(itemName) {
+  const name  = document.getElementById('f-name').value.trim();
+  const addr  = document.getElementById('f-addr').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  if (!name || !addr || !phone) { alert('يرجى تعبئة جميع الحقول'); return; }
+  const text = `📦 طلب جديد\n\nالمنتج: ${itemName}\nالاسم: ${name}\nالعنوان: ${addr}\nالهاتف: ${phone}`;
+  window.open(`https://wa.me/${DATA.profile.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
+  document.getElementById('modal-content').innerHTML = `
+    <div style="text-align:center;padding:2.5rem 1rem;">
+      <div style="width:64px;height:64px;background:#E1F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:32px;">✓</div>
+      <div style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px;">جاري فتح واتساب...</div>
+      <div style="font-size:14px;color:#666;">شكراً ${name}، سيتواصل معك عبدالله مساعد قريباً.</div>
+    </div>`;
+}
+
+// ===== USAGE GUIDE SLIDER LOGIC =====
+const _guideState = {};
+
+function _guideTo(key, idx) {
+  const st = _guideState[key];
+  if (!st) return;
+  st.cur = Math.max(0, Math.min(idx, st.total - 1));
+  const track = document.getElementById(key + '-track');
+  if (track) track.style.transform = `translateX(-${st.cur * 100}%)`;
+  // dots
+  document.querySelectorAll(`#${key}-dots .guide-dot`).forEach((d, i) => d.classList.toggle('active', i === st.cur));
+  // count
+  const cnt = document.getElementById(key + '-count');
+  if (cnt) cnt.textContent = `${st.cur + 1} / ${st.total}`;
+  // btns
+  const prev = document.getElementById(key + '-prev');
+  const next = document.getElementById(key + '-next');
+  if (prev) prev.disabled = st.cur <= 0;
+  if (next) next.disabled = st.cur >= st.total - 1;
+}
+
+function _guidePrev(key) {
+  const st = _guideState[key];
+  if (st) _guideTo(key, st.cur - 1);
+}
+
+function _guideNext(key) {
+  const st = _guideState[key];
+  if (st) _guideTo(key, st.cur + 1);
+}
+
+function _guideInitTouch(key, total) {
+  _guideState[key] = { cur: 0, total };
+  // Wait for DOM to render
+  requestAnimationFrame(() => {
+    const wrap = document.getElementById(key + '-wrap');
+    if (!wrap) return;
+    let startX = 0, isDragging = false;
+    wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
+    wrap.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) diff > 0 ? _guideNext(key) : _guidePrev(key);
+      isDragging = false;
+    }, { passive: true });
+    wrap.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; e.preventDefault(); });
+    wrap.addEventListener('mouseup', e => {
+      if (!isDragging) return;
+      const diff = startX - e.clientX;
+      if (Math.abs(diff) > 40) diff > 0 ? _guideNext(key) : _guidePrev(key);
+      isDragging = false;
+    });
+  });
+}
+
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+function closeIfBackdrop(e) { if (e.target.id === 'modal-backdrop') closeModal(); }
+
+// ===== ADMIN: BOOKS =====
+function renderBooksAdmin() {
+  document.getElementById('books-admin-list').innerHTML = DATA.books.map((b,i) => `
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${b.title}</div>
+        <div>
+          <button class="btn-delete" onclick="deleteBook('${b.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('book-body-${b.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="book-body-${b.id}">
+        <div class="admin-field"><label>الرمز المختصر (KEY)</label><input type="text" id="bk-${b.id}" value="${b.key||''}" /></div>
+        <div class="admin-field"><label>العنوان الكامل</label><input type="text" id="bt-${b.id}" value="${b.title}" /></div>
+        <div class="admin-field"><label>العنوان الفرعي</label><input type="text" id="bs-${b.id}" value="${b.sub}" /></div>
+        <div class="admin-field"><label>الوصف</label><textarea id="bd-${b.id}">${b.desc}</textarea></div>
+        <div class="admin-field">
+          <label>رابط صورة الكتاب (اختياري — تستبدل لون الغلاف)</label>
+          <div class="img-field-row">
+            <input type="text" id="bimg-${b.id}" value="${b.img||''}" placeholder="https://..." oninput="previewBookImg('${b.id}')" />
+            <button id="upload-btn-bimg-${b.id}" class="upload-btn" onclick="triggerImgUpload('bimg-${b.id}','bimg-preview-${b.id}',null)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+            </button>
+          </div>
+          <div id="bimg-preview-${b.id}" style="margin-top:6px;${b.img?'':'display:none;'}">
+            <img src="${b.img||''}" alt="معاينة" style="width:56px;height:72px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" onerror="this.style.display='none'" />
+          </div>
+        </div>
+        <div class="admin-field"><label>لون الغلاف (CSS gradient — يُستخدم إن لم تضع صورة)</label><input type="text" id="bc-${b.id}" value="${b.coverGrad}" /></div>
+        <div class="admin-field"><label>نوع الشارة</label>
+          <select id="bb-${b.id}"><option value="modal-badge-teal" ${b.badgeClass==='modal-badge-teal'?'selected':''}>أخضر</option><option value="modal-badge-blue" ${b.badgeClass==='modal-badge-blue'?'selected':''}>أزرق</option></select>
+        </div>
+        <div class="admin-field"><label>نص الشارة</label><input type="text" id="bbn-${b.id}" value="${b.badge}" /></div>
+        <div class="admin-field"><label>💰 السعر (اختياري)</label><input type="text" id="bpr-${b.id}" value="${b.price||''}" placeholder="مثال: 25,000 د.ع" /></div>
+        <div class="admin-field">
+          <label>المميزات</label>
+          <div class="features-list" id="feats-${b.id}">${(b.features||[]).map((f,fi) => `<div class="feature-row"><input type="text" value="${f}" id="bf-${b.id}-${fi}" /><button class="btn-remove-feat" onclick="removeFeat('${b.id}',${fi})">✕</button></div>`).join('')}</div>
+          <button class="btn-add-feat" onclick="addFeat('${b.id}')">+ إضافة ميزة</button>
+        </div>
+        <div class="admin-field">
+          <label>📄 رابط PDF المعاينة (Google Drive أو Cloudinary أو أي رابط مباشر)</label>
+          <input type="text" id="bpdf-${b.id}" value="${b.previewPdf||''}" placeholder="https://drive.google.com/file/d/.../preview" style="direction:ltr;font-size:12px;" />
+          <div style="font-size:11px;color:#aaa;margin-top:4px;">💡 Google Drive: افتح الملف ← مشاركة ← انسخ رابط المعاينة /preview</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <input type="checkbox" id="bn-${b.id}" ${b.isNew?'checked':''} />
+          <label for="bn-${b.id}" style="font-size:13px;color:#555;">عرض شارة "جديد"</label>
+        </div>
+        <button class="btn-save" style="margin-top:12px;" onclick="saveBook('${b.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addBook() {
+  const id = 'book_' + Date.now();
+  DATA.books.push({ id, key: 'NEW', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'كتاب جديد', sub: '', coverGrad: 'linear-gradient(135deg,#1D9E75,#085041)', desc: '', features: [], isNew: true });
+  await saveData(); renderBooksAdmin(); renderBooks();
+  setTimeout(() => { document.getElementById('book-body-'+id) && document.getElementById('book-body-'+id).classList.add('open'); }, 100);
+}
+
+async function saveBook(id) {
+  const b = DATA.books.find(x => x.id === id);
+  if (!b) return;
+  b.key = document.getElementById('bk-'+id).value;
+  b.title = document.getElementById('bt-'+id).value;
+  b.sub = document.getElementById('bs-'+id).value;
+  b.desc = document.getElementById('bd-'+id).value;
+  b.img = document.getElementById('bimg-'+id).value;
+  b.coverGrad = document.getElementById('bc-'+id).value;
+  b.badgeClass = document.getElementById('bb-'+id).value;
+  b.badge = document.getElementById('bbn-'+id).value;
+  b.price = (document.getElementById('bpr-'+id) ? document.getElementById('bpr-'+id).value : (b.price||'')).trim();
+  b.isNew = document.getElementById('bn-'+id).checked;
+  b.previewPdf = (document.getElementById('bpdf-'+id) ? document.getElementById('bpdf-'+id).value : (b.previewPdf||'')).trim();
+  b.features = [];
+  let fi = 0;
+  while (document.getElementById('bf-'+id+'-'+fi)) {
+    b.features.push(document.getElementById('bf-'+id+'-'+fi).value);
+    fi++;
+  }
+  await saveData(); renderBooks(); renderBooksAdmin(); showSuccess('books-success');
+}
+
+async function deleteBook(id) {
+  if (!confirm('هل تريد حذف هذا الكتاب؟')) return;
+  DATA.books = DATA.books.filter(x => x.id !== id);
+  await saveData(); renderBooksAdmin(); renderBooks();
+}
+
+async function addFeat(bookId) {
+  const b = DATA.books.find(x => x.id === bookId);
+  if (!b) return;
+  b.features.push('');
+  await saveData(); renderBooksAdmin();
+  document.getElementById('book-body-'+bookId).classList.add('open');
+}
+
+async function removeFeat(bookId, fi) {
+  const b = DATA.books.find(x => x.id === bookId);
+  if (!b) return;
+  b.features.splice(fi, 1);
+  await saveData(); renderBooksAdmin();
+  document.getElementById('book-body-'+bookId).classList.add('open');
+}
+
+// ===== ADMIN: STAINS =====
+function renderStainsAdmin() {
+  document.getElementById('stains-admin-list').innerHTML = DATA.stains.map((s,i) => `
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${s.name}</div>
+        <div>
+          <button class="btn-delete" onclick="deleteStain('${s.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('stain-body-${s.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="stain-body-${s.id}">
+        <div class="admin-field"><label>الاسم</label><input type="text" id="sn-${s.id}" value="${s.name}" /></div>
+        <div class="admin-field"><label>النوع</label><input type="text" id="st-${s.id}" value="${s.type}" /></div>
+        <div class="admin-field"><label>رابط الصورة</label>
+          <div class="img-field-row">
+            <input type="text" id="si-${s.id}" value="${s.img}" placeholder="https://..." />
+            <button id="upload-btn-si-${s.id}" class="upload-btn" onclick="triggerImgUpload('si-${s.id}',null,null)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+            </button>
+          </div>
+        </div>
+        <div class="admin-field"><label>إيموجي (بديل الصورة)</label><input type="text" id="se-${s.id}" value="${s.emoji}" /></div>
+        <div class="admin-field"><label>لون خلفية الإيموجي</label><input type="text" id="seb-${s.id}" value="${s.emojiBg}" /></div>
+        <div class="admin-field"><label>الوصف</label><textarea id="sd-${s.id}">${s.desc}</textarea></div>
+        <div class="admin-field"><label>💰 السعر (اختياري)</label><input type="text" id="spr-${s.id}" value="${s.price||''}" placeholder="مثال: 15,000 د.ع" /></div>
+        <div class="admin-field">
+          <label>📸 دليل الاستخدام المصور (صور + وصف لكل خطوة)</label>
+          <div class="features-list" id="guide-steps-${s.id}">
+            ${(s.guideSteps||[]).map((st,gi) => `
+              <div class="feature-row" id="guide-row-${s.id}-${gi}" style="flex-direction:column;align-items:stretch;gap:4px;background:#f9f9f9;padding:8px;border-radius:8px;border:0.5px solid #eee;">
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="font-size:11px;color:#aaa;min-width:20px;">خ${gi+1}</span>
+                  <input type="text" id="gs-img-${s.id}-${gi}" value="${st.img||''}" placeholder="رابط صورة الخطوة..." style="flex:1;font-size:12px;direction:ltr;" />
+                  <button class="upload-btn" style="padding:4px 8px;margin-top:0;flex-shrink:0;" onclick="triggerImgUpload('gs-img-${s.id}-${gi}',null,null)">↑</button>
+                  <button class="btn-remove-feat" onclick="removeGuideStep('${s.id}',${gi})">✕</button>
+                </div>
+                <input type="text" id="gs-cap-${s.id}-${gi}" value="${st.caption||''}" placeholder="وصف الخطوة (اختياري)..." style="font-size:12px;" />
+              </div>`).join('')}
+          </div>
+          <button class="btn-add-feat" style="margin-top:6px;" onclick="addGuideStep('${s.id}')">+ إضافة خطوة</button>
+        </div>
+        <button class="btn-save" style="margin-top:8px;" onclick="saveStain('${s.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addStain() {
+  const id = 'stain_' + Date.now();
+  DATA.stains.push({ id, name: 'صبغة جديدة', type: '', img: '', emoji: '🧪', emojiBg: '#f5f5f5', desc: '' });
+  await saveData(); renderStainsAdmin(); renderStains();
+  setTimeout(() => { document.getElementById('stain-body-'+id) && document.getElementById('stain-body-'+id).classList.add('open'); }, 100);
+}
+
+async function saveStain(id) {
+  const s = DATA.stains.find(x => x.id === id);
+  if (!s) return;
+  s.name = document.getElementById('sn-'+id).value;
+  s.type = document.getElementById('st-'+id).value;
+  s.img = document.getElementById('si-'+id).value;
+  s.emoji = document.getElementById('se-'+id).value;
+  s.emojiBg = document.getElementById('seb-'+id).value;
+  s.desc = document.getElementById('sd-'+id).value;
+  s.price = (document.getElementById('spr-'+id) ? document.getElementById('spr-'+id).value : (s.price||'')).trim();
+  // Save guide steps
+  s.guideSteps = [];
+  let gi = 0;
+  while (document.getElementById('gs-img-'+id+'-'+gi)) {
+    const img = document.getElementById('gs-img-'+id+'-'+gi).value.trim();
+    const caption = document.getElementById('gs-cap-'+id+'-'+gi).value.trim();
+    if (img) s.guideSteps.push({ img, caption });
+    gi++;
+  }
+  await saveData(); renderStains(); showSuccess('stains-success');
+}
+
+async function addGuideStep(stainId) {
+  const s = DATA.stains.find(x => x.id === stainId);
+  if (!s) return;
+  if (!s.guideSteps) s.guideSteps = [];
+  s.guideSteps.push({ img: '', caption: '' });
+  await saveData(); renderStainsAdmin();
+  const body = document.getElementById('stain-body-'+stainId);
+  if (body) body.classList.add('open');
+}
+
+async function removeGuideStep(stainId, gi) {
+  const s = DATA.stains.find(x => x.id === stainId);
+  if (!s || !s.guideSteps) return;
+  s.guideSteps.splice(gi, 1);
+  await saveData(); renderStainsAdmin();
+  const body = document.getElementById('stain-body-'+stainId);
+  if (body) body.classList.add('open');
+}
+
+async function deleteStain(id) {
+  if (!confirm('هل تريد حذف هذه الصبغة؟')) return;
+  DATA.stains = DATA.stains.filter(x => x.id !== id);
+  await saveData(); renderStainsAdmin(); renderStains();
+}
+
+// ===== ADMIN: COURSES =====
+function renderCoursesAdmin() {
+  if (!DATA.courses) DATA.courses = [];
+  document.getElementById('courses-admin-list').innerHTML = DATA.courses.map((c,i) => `
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div class="admin-card-title">${c.title}</div>
+        <div>
+          <button class="btn-delete" onclick="deleteCourse('${c.id}')">🗑 حذف</button>
+          <button class="btn-edit" onclick="toggleCollapse('course-body-${c.id}')">✏️ تعديل</button>
+        </div>
+      </div>
+      <div class="collapse-body" id="course-body-${c.id}">
+        <div class="admin-field"><label>عنوان الدورة</label><input type="text" id="ct-${c.id}" value="${c.title}" /></div>
+        <div class="admin-field"><label>التخصص / الفئة</label><input type="text" id="cs-${c.id}" value="${c.sub}" /></div>
+        <div class="admin-field"><label>إيموجي الأيقونة</label><input type="text" id="ci-${c.id}" value="${c.icon}" /></div>
+        <div class="admin-field"><label>لون خلفية الأيقونة</label><input type="text" id="cib-${c.id}" value="${c.iconBg}" /></div>
+        <div class="admin-field">
+          <label>رابط صورة الدورة (اختياري — تظهر في البطاقة والمودال)</label>
+          <div class="img-field-row">
+            <input type="text" id="cimg-${c.id}" value="${c.img||''}" placeholder="https://..." oninput="previewCourseImg('${c.id}')" />
+            <button id="upload-btn-cimg-${c.id}" class="upload-btn" onclick="triggerImgUpload('cimg-${c.id}','cimg-preview-${c.id}',null)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع
+            </button>
+          </div>
+          <div id="cimg-preview-${c.id}" style="margin-top:6px;${c.img?'':'display:none;'}">
+            <img src="${c.img||''}" alt="معاينة" style="width:100%;max-height:100px;object-fit:cover;border-radius:8px;border:1px solid #ddd;" onerror="this.style.display='none'" />
+          </div>
+        </div>
+        <div class="admin-field"><label>الوصف</label><textarea id="cd-${c.id}">${c.desc}</textarea></div>
+        <div class="admin-field"><label>السعر (اختياري)</label><input type="text" id="cp-${c.id}" value="${c.price||''}" placeholder="مثال: 50,000 دينار" /></div>
+        <div class="admin-field">
+          <label>المميزات</label>
+          <div class="features-list" id="cfeats-${c.id}">${(c.features||[]).map((f,fi) => `<div class="feature-row"><input type="text" value="${f}" id="cf-${c.id}-${fi}" /><button class="btn-remove-feat" onclick="removeCourseFeat('${c.id}',${fi})">✕</button></div>`).join('')}</div>
+          <button class="btn-add-feat" onclick="addCourseFeat('${c.id}')">+ إضافة ميزة</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <input type="checkbox" id="cn-${c.id}" ${c.isNew?'checked':''} />
+          <label for="cn-${c.id}" style="font-size:13px;color:#555;">عرض شارة "جديد"</label>
+        </div>
+        <button class="btn-save" style="margin-top:12px;" onclick="saveCourse('${c.id}')">💾 حفظ</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addCourse() {
+  const id = 'course_' + Date.now();
+  DATA.courses.push({ id, title: 'دورة جديدة', sub: 'مختبر', icon: '🔬', iconBg: '#E1F5EE', desc: '', features: [], price: '', isNew: true });
+  await saveData(); renderCoursesAdmin(); renderCourses();
+  setTimeout(() => { document.getElementById('course-body-'+id) && document.getElementById('course-body-'+id).classList.add('open'); }, 100);
+}
+
+async function saveCourse(id) {
+  const c = DATA.courses.find(x => x.id === id);
+  if (!c) return;
+  c.title = document.getElementById('ct-'+id).value;
+  c.sub = document.getElementById('cs-'+id).value;
+  c.icon = document.getElementById('ci-'+id).value;
+  c.iconBg = document.getElementById('cib-'+id).value;
+  c.img = document.getElementById('cimg-'+id).value;
+  c.desc = document.getElementById('cd-'+id).value;
+  c.price = document.getElementById('cp-'+id).value;
+  c.isNew = document.getElementById('cn-'+id).checked;
+  c.features = [];
+  let fi = 0;
+  while (document.getElementById('cf-'+id+'-'+fi)) {
+    c.features.push(document.getElementById('cf-'+id+'-'+fi).value);
+    fi++;
+  }
+  await saveData(); renderCourses(); showSuccess('courses-success');
+}
+
+async function deleteCourse(id) {
+  if (!confirm('هل تريد حذف هذه الدورة؟')) return;
+  DATA.courses = DATA.courses.filter(x => x.id !== id);
+  await saveData(); renderCoursesAdmin(); renderCourses();
+}
+
+async function addCourseFeat(courseId) {
+  const c = DATA.courses.find(x => x.id === courseId);
+  if (!c) return;
+  c.features.push('');
+  await saveData(); renderCoursesAdmin();
+  document.getElementById('course-body-'+courseId).classList.add('open');
+}
+
+async function removeCourseFeat(courseId, fi) {
+  const c = DATA.courses.find(x => x.id === courseId);
+  if (!c) return;
+  c.features.splice(fi, 1);
+  await saveData(); renderCoursesAdmin();
+  document.getElementById('course-body-'+courseId).classList.add('open');
+}
+
+function toggleCollapse(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+// ===== PREVIEW HELPERS =====
+function previewAvatar() {
+  const url = document.getElementById('p-avatar').value.trim();
+  const wrap = document.getElementById('avatar-preview');
+  const img  = document.getElementById('avatar-preview-img');
+  if (url) { img.src = url; wrap.style.display = 'block'; }
+  else { wrap.style.display = 'none'; }
+}
+function previewBookImg(id) {
+  const url = document.getElementById('bimg-'+id).value.trim();
+  const wrap = document.getElementById('bimg-preview-'+id);
+  if (wrap) {
+    if (url) { wrap.style.display = 'block'; const img = wrap.querySelector('img'); if(img){img.src=url;img.style.display='';} }
+    else { wrap.style.display = 'none'; }
+  }
+}
+function previewCourseImg(id) {
+  const url = document.getElementById('cimg-'+id).value.trim();
+  const wrap = document.getElementById('cimg-preview-'+id);
+  if (wrap) {
+    if (url) { wrap.style.display = 'block'; const img = wrap.querySelector('img'); if(img){img.src=url;img.style.display='';} }
+    else { wrap.style.display = 'none'; }
+  }
+}
+
+// ===== SECRET TAP (5x on name) =====
+let _tapCount = 0, _tapTimer = null;
+function handleNameTap() {
+  _tapCount++;
+  clearTimeout(_tapTimer);
+  if (_tapCount >= 5) { _tapCount = 0; openAdminLogin(); return; }
+  _tapTimer = setTimeout(() => { _tapCount = 0; }, 1500);
+}
+
+// ===== APP SECTION =====
+function renderApp() {
+  const a = DATA.app;
+  const wrap = document.getElementById('app-section-wrap');
+  if (!wrap) return;
+  if (!a || a.visible === false || a.visible === 'false') { wrap.innerHTML = ''; return; }
+  const feats = (a.features||[]).map(f => `
+    <div class="app-feat">
+      <div class="app-feat-icon">${f.icon}</div>
+      <span>${f.label}</span>
+    </div>`).join('');
+  const androidBtn = a.androidUrl ? `
+    <a class="app-btn app-btn-android" href="${a.androidUrl}" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341l1.005-1.741a.25.25 0 00-.432-.25l-1.018 1.763A6.238 6.238 0 0112 14.25a6.238 6.238 0 01-5.078-1.137l-1.018-1.763a.25.25 0 00-.432.25l1.005 1.741A6.257 6.257 0 005.75 18.5h12.5a6.257 6.257 0 00-1.727-3.159zM9 17a.75.75 0 110-1.5A.75.75 0 019 17zm6 0a.75.75 0 110-1.5.75.75 0 010 1.5zM5.422 7.813l-1.47-2.547a.25.25 0 01.432-.25l1.488 2.578A12.455 12.455 0 0112 6.75c2.25 0 4.356.594 6.128 1.844l1.488-2.578a.25.25 0 01.432.25l-1.47 2.547A12.478 12.478 0 0124 15.5H0a12.478 12.478 0 015.422-7.687z"/></svg>
+      Google Play
+    </a>` : '';
+  const iosBtn = a.iosUrl ? `
+    <a class="app-btn app-btn-ios" href="${a.iosUrl}" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      App Store
+    </a>` : '';
+  wrap.innerHTML = `
+    <div class="section-label">التطبيق</div>
+    <div class="app-section">
+      <div class="app-label">📱 متاح على Android و iOS</div>
+      <div class="app-title">${a.title}</div>
+      <div class="app-sub">${a.sub}</div>
+      <div class="app-features">${feats}</div>
+      <div class="app-btns">${androidBtn}${iosBtn}</div>
+    </div>
+    <div class="divider"></div>`;
+}
+
+function populateAppForm() {
+  const a = DATA.app;
+  document.getElementById('app-visible').value = String(a.visible !== false && a.visible !== 'false');
+  document.getElementById('app-title').value = a.title || '';
+  document.getElementById('app-sub').value = a.sub || '';
+  document.getElementById('app-android').value = a.androidUrl || '';
+  document.getElementById('app-ios').value = a.iosUrl || '';
+  renderAppFeatsAdmin();
+}
+
+function renderAppFeatsAdmin() {
+  const a = DATA.app;
+  document.getElementById('app-feats-list').innerHTML = (a.features||[]).map((f,i) => `
+    <div class="feature-row">
+      <input type="text" style="width:50px;" value="${f.icon}" id="apf-icon-${i}" placeholder="🎬" />
+      <input type="text" value="${f.label}" id="apf-label-${i}" placeholder="اسم الميزة" />
+      <button class="btn-remove-feat" onclick="removeAppFeat(${i})">✕</button>
+    </div>`).join('');
+}
+
+async function addAppFeat() {
+  DATA.app.features.push({ icon: '⭐', label: '' });
+  await saveData(); renderAppFeatsAdmin();
+}
+
+async function removeAppFeat(i) {
+  DATA.app.features.splice(i, 1);
+  await saveData(); renderAppFeatsAdmin();
+}
+
+async function saveApp() {
+  const a = DATA.app;
+  a.visible = document.getElementById('app-visible').value === 'true';
+  a.title = document.getElementById('app-title').value;
+  a.sub = document.getElementById('app-sub').value;
+  a.androidUrl = document.getElementById('app-android').value;
+  a.iosUrl = document.getElementById('app-ios').value;
+  a.features = [];
+  let i = 0;
+  while (document.getElementById('apf-icon-'+i)) {
+    a.features.push({ icon: document.getElementById('apf-icon-'+i).value, label: document.getElementById('apf-label-'+i).value });
+    i++;
+  }
+  await saveData(); renderApp(); showSuccess('app-success');
+}
+
+// ===== BOOK PREVIEW (StPageFlip) =====
+let _pageFlip = null;
+let _previewPages = [];
+
+function openPreviewDirect(bookId) {
+  const b = DATA.books.find(x => x.id === bookId);
+  if (!b) return;
+  const pdfUrl = b.previewPdf || '';
+  openPreviewPdf(pdfUrl, b.title);
+}
+
+function openPreviewPdf(pdfUrl, bookTitle) {
+  document.getElementById('preview-book-title').textContent = bookTitle;
+  document.getElementById('book-container').innerHTML = '';
+  document.getElementById('preview-loading').style.display = 'none';
+  document.getElementById('preview-empty').style.display = 'none';
+  document.getElementById('preview-footer').style.display = 'none';
+  document.getElementById('preview-backdrop').classList.add('open');
+
+  if (!pdfUrl) {
+    document.getElementById('preview-empty').style.display = 'flex';
+    return;
+  }
+
+  // Convert any Google Drive link to embed-friendly format
+  let embedUrl = pdfUrl;
+  const driveMatch = pdfUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (driveMatch) {
+    embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+  }
+
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  if (isMobile && driveMatch) {
+    // On mobile: show open button instead of iframe (Google blocks iframe on mobile)
+    document.getElementById('book-container').style.cssText = 'width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;';
+    document.getElementById('book-container').innerHTML = `
+      <div style="font-size:48px;">📄</div>
+      <div style="color:#ccc;font-family:Tajawal,sans-serif;font-size:15px;text-align:center;">اضغط لفتح معاينة الكتاب</div>
+      <a href="https://drive.google.com/file/d/${driveMatch[1]}/view?usp=sharing" target="_blank"
+         style="background:linear-gradient(135deg,#1D9E75,#085041);color:#fff;padding:12px 28px;border-radius:12px;font-family:Tajawal,sans-serif;font-size:15px;font-weight:700;text-decoration:none;display:inline-block;">
+        📖 فتح المعاينة
+      </a>`;
+  } else {
+    // Desktop: embed via iframe
+    const iframe = document.createElement('iframe');
+    iframe.src = embedUrl;
+    iframe.style.cssText = 'width:100%;height:100%;min-height:65vh;border:none;border-radius:10px;background:#222;';
+    iframe.setAttribute('allowfullscreen', '');
+    document.getElementById('book-container').style.cssText = 'width:100%;height:100%;display:flex;flex-direction:column;';
+    document.getElementById('preview-stage').style.padding = '8px';
+    document.getElementById('book-container').appendChild(iframe);
+  }
+}
+
+async function openPreviewWithPages(pages, bookTitle) {
+  _pageFlip = null;
+  _previewPages = [];
+
+  document.getElementById('preview-book-title').textContent = bookTitle;
+  document.getElementById('book-container').innerHTML = '';
+  document.getElementById('preview-loading').style.display = 'flex';
+  document.getElementById('preview-empty').style.display = 'none';
+  document.getElementById('preview-footer').style.display = 'none';
+  document.getElementById('preview-backdrop').classList.add('open');
+
+  document.getElementById('preview-loading').style.display = 'none';
+
+  if (!pages || pages.length === 0) {
+    document.getElementById('preview-empty').style.display = 'flex';
+    return;
+  }
+
+  _previewPages = pages;
+  document.getElementById('preview-footer').style.display = 'flex';
+  document.getElementById('total-pages').textContent = pages.length;
+  document.getElementById('cur-page').textContent = 1;
+
+  // Load StPageFlip if not already loaded
+  if (!window.St) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/StPageFlip/2.0.7/StPageFlip.browser.js');
+  }
+
+  initFlipBook(pages);
+}
+
+// Probe pages: try loading images 1.jpg, 2.jpg, ... in sequence
+// Returns an array of valid image URLs
+async function probePages(basePath, start, max) {
+  const found = [];
+  let i = start;
+  let consecutive_fails = 0;
+
+  while (i <= max && consecutive_fails < 2) {
+    const url = `${basePath}${i}.jpg`;
+    const ok = await imageExists(url);
+    if (ok) {
+      found.push(url);
+      consecutive_fails = 0;
+    } else {
+      consecutive_fails++;
+    }
+    i++;
+  }
+  return found;
+}
+
+function imageExists(url) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+function initFlipBook(pages) {
+  const stage = document.getElementById('preview-stage');
+  const container = document.getElementById('book-container');
+  container.innerHTML = '';
+
+  // Compute book dimensions to fit stage responsively
+  const stageW = stage.clientWidth  || window.innerWidth  - 32;
+  const stageH = stage.clientHeight || window.innerHeight * 0.65;
+  const isMobile = window.innerWidth <= 520;
+
+  // Single page on mobile, double on desktop
+  let bookW, bookH;
+  if (isMobile) {
+    bookW = Math.min(stageW - 16, 340);
+    bookH = Math.round(bookW * 1.42);
+  } else {
+    bookH = Math.min(stageH - 16, 520);
+    bookW = Math.round(bookH / 1.42) * 2;
+    if (bookW > stageW - 16) {
+      bookW = stageW - 16;
+      bookH = Math.round((bookW / 2) * 1.42);
+    }
+  }
+
+  // Build page elements for StPageFlip
+  const pageEls = pages.map(url => {
+    const div = document.createElement('div');
+    div.className = 'page-content';
+    div.style.cssText = 'background:#222;overflow:hidden;';
+
+    const img = document.createElement('img');
+    img.src = url;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none;display:block;';
+    img.draggable = false;
+    img.addEventListener('contextmenu', e => e.preventDefault());
+
+    div.appendChild(img);
+    return div;
+  });
+
+  // Add all pages to container temporarily (StPageFlip needs them in DOM)
+  pageEls.forEach(el => container.appendChild(el));
+
+  try {
+    _pageFlip = new St.PageFlip(container, {
+      width:  isMobile ? bookW : Math.round(bookW / 2),
+      height: bookH,
+      size:   'fixed',
+      minWidth: 100,
+      minHeight: 100,
+      showCover: true,
+      mobileScrollSupport: true,
+      swipeDistance: 30,
+      usePortrait: isMobile,
+      startZIndex: 0,
+      drawShadow: true,
+      flippingTime: 700,
+      useMouseEvents: true,
+    });
+
+    _pageFlip.loadFromHTML(document.querySelectorAll('#book-container .page-content'));
+
+    _pageFlip.on('flip', e => {
+      const cur = e.data + 1;
+      document.getElementById('cur-page').textContent = cur;
+      updateNavBtns(cur, pages.length);
+    });
+
+    updateNavBtns(1, pages.length);
+  } catch(err) {
+    console.error('StPageFlip error:', err);
+    // Fallback: simple image carousel
+    initFallbackViewer(pages, container, bookW, bookH);
+  }
+}
+
+// Simple fallback viewer if StPageFlip fails
+function initFallbackViewer(pages, container, w, h) {
+  container.innerHTML = '';
+  let cur = 0;
+  const render = () => {
+    container.innerHTML = `
+      <div style="width:${w}px;height:${h}px;max-width:100%;border-radius:8px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.6);">
+        <img src="${pages[cur]}" style="width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;" draggable="false" oncontextmenu="return false"/>
+      </div>`;
+    document.getElementById('cur-page').textContent = cur + 1;
+    updateNavBtns(cur + 1, pages.length);
+  };
+  window._fallbackFlip = { cur: () => cur, next: () => { if (cur < pages.length-1) { cur++; render(); } }, prev: () => { if (cur > 0) { cur--; render(); } } };
+  render();
+}
+
+function updateNavBtns(cur, total) {
+  document.getElementById('btn-prev').disabled = (cur <= 1);
+  document.getElementById('btn-next').disabled = (cur >= total);
+}
+
+function previewNext() {
+  if (_pageFlip) { _pageFlip.flipNext('bottom'); }
+  else if (window._fallbackFlip) { window._fallbackFlip.next(); }
+}
+function previewPrev() {
+  if (_pageFlip) { _pageFlip.flipPrev('bottom'); }
+  else if (window._fallbackFlip) { window._fallbackFlip.prev(); }
+}
+
+function closePreview() {
+  document.getElementById('preview-backdrop').classList.remove('open');
+  if (_pageFlip) { try { _pageFlip.destroy(); } catch(e) {} _pageFlip = null; }
+  window._fallbackFlip = null;
+  document.getElementById('book-container').innerHTML = '';
+}
+function closePreviewIfBackdrop(e) {
+  if (e.target.id === 'preview-backdrop') closePreview();
+}
+
+// Close preview with Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('preview-backdrop').classList.contains('open')) {
+    closePreview();
+  }
+});
+
+// ===== INIT =====
+(async () => {
+  document.body.insertAdjacentHTML('afterbegin',
+    '<div id="loading-screen" style="position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px;">' +
+    '<div style="width:36px;height:36px;border:3px solid #e5e5e5;border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite;"></div>' +
+    '<div style="font-family:Tajawal,sans-serif;font-size:14px;color:#888;">جاري التحميل...</div>' +
+    '<style>@keyframes spin{to{transform:rotate(360deg)}}</style></div>');
+
+  try {
+    // timeout بعد 5 ثواني يكمل بدون Firebase
+    await Promise.race([
+      loadData(),
+      new Promise(res => setTimeout(res, 5000))
+    ]);
+  } catch(e) {
+    console.warn("Load failed, using defaults", e);
+    const saved = localStorage.getItem('abid_data');
+    if (saved) { try { DATA = JSON.parse(saved); } catch(e2) {} }
+  }
+
+  document.getElementById('loading-screen').remove();
+  renderProfile();
+  renderVideos();
+  renderBooks();
+  renderStains();
+  renderFilters();
+  renderStands();
+  renderCourses();
+  renderApp();
+})();
+</script>
+</body>
+</html>
