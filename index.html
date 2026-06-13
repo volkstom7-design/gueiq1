@@ -10,6 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="عبدالله مساعد" />
   <link rel="manifest" id="pwa-manifest" />
   <link rel="apple-touch-icon" id="pwa-apple-icon" />
+  <link rel="icon" id="pwa-favicon" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -413,6 +414,8 @@
     body.dark .hero-bio { color: #aaa; }
     body.dark .contact-chip { background: #2a2a2a; border-color: #3a3a3a; color: #ccc; }
     body.dark .contact-chip:hover { border-color: #1D9E75; }
+    body.dark #chip-tiktok { color: #f0f0f0 !important; }
+    body.dark #chip-tiktok svg { fill: #f0f0f0 !important; }
     body.dark .section-label { color: #666; }
     body.dark .divider { background: #2a2a2a; }
 
@@ -529,6 +532,12 @@
             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.186 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212-.07-.063-.174-.041-.249-.024-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.373-1.297-.787.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.362 4.025-1.598 4.476-1.606.099-.002.321.023.464.139.119.097.152.227.169.319.018.099.04.265.024.408z"/>
           </svg>
           <span id="telegram-display">YOUR_TELEGRAM_HERE</span>
+        </a>
+        <a class="contact-chip" id="chip-tiktok" href="https://www.tiktok.com/@YOUR_TIKTOK_HERE" target="_blank" style="color:#111;">
+          <svg viewBox="0 0 24 24" fill="#111" width="13" height="13">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.89 2.78 2.89 2.89 0 01-2.9-2.89 2.89 2.89 0 012.9-2.89c.3 0 .58.05.85.13V9.4a6.33 6.33 0 00-.85-.06A6.34 6.34 0 003.15 15.7a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.42a8.16 8.16 0 004.77 1.52V6.69z"/>
+          </svg>
+          <span id="tiktok-display">YOUR_TIKTOK_HERE</span>
         </a>
       </div>
     </div>
@@ -687,6 +696,7 @@
           </div>
           <div class="admin-field"><label>انستغرام (اسم المستخدم)</label><input type="text" id="p-instagram" /></div>
           <div class="admin-field"><label>تيليجرام (اسم المستخدم بدون @)</label><input type="text" id="p-telegram" placeholder="username" /></div>
+          <div class="admin-field"><label>تيك توك (اسم المستخدم بدون @)</label><input type="text" id="p-tiktok" placeholder="username" /></div>
           <button class="btn-save" onclick="saveProfile()">💾 حفظ</button>
         </div>
       </div>
@@ -790,7 +800,8 @@ let DATA = {
     whatsapp: '9647XXXXXXXXX',
     avatar: 'YOUR_PHOTO_URL_HERE',
     instagram: 'YOUR_INSTAGRAM_HERE',
-    telegram: 'YOUR_TELEGRAM_HERE'
+    telegram: 'YOUR_TELEGRAM_HERE',
+    tiktok: 'YOUR_TIKTOK_HERE'
   },
   books: [
     { id: 'GUE', key: 'GUE', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'GUE — General Urine Examination', sub: 'فحص البول العام', coverGrad: 'linear-gradient(135deg,#1D9E75,#085041)', desc: 'كتاب متخصص يغطي جميع جوانب فحص البول العام بأسلوب علمي حديث ومبسّط. يربط المفاهيم النظرية بالتطبيق العملي داخل المختبر.', features: ['تفسير شامل لنتائج فحص البول','ربط النتائج بالحالات السريرية','صور توضيحية ومخططات علمية'], isNew: true },
@@ -1041,6 +1052,7 @@ function populateProfileForm() {
   document.getElementById('p-avatar').value = p.avatar;
   document.getElementById('p-instagram').value = p.instagram;
   document.getElementById('p-telegram').value = p.telegram || '';
+  document.getElementById('p-tiktok').value = p.tiktok || '';
   // show avatar preview if URL exists
   if (p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE') {
     const wrap = document.getElementById('avatar-preview');
@@ -1057,6 +1069,7 @@ async function saveProfile() {
   DATA.profile.avatar = document.getElementById('p-avatar').value;
   DATA.profile.instagram = document.getElementById('p-instagram').value;
   DATA.profile.telegram = document.getElementById('p-telegram').value;
+  DATA.profile.tiktok = document.getElementById('p-tiktok').value;
   await saveData(); renderProfile();
   showSuccess('profile-success');
 }
@@ -1074,6 +1087,8 @@ function renderProfile() {
   document.getElementById('chip-instagram').href = 'https://instagram.com/' + p.instagram;
   document.getElementById('telegram-display').textContent = p.telegram;
   document.getElementById('chip-telegram').href = 'https://t.me/' + p.telegram;
+  document.getElementById('tiktok-display').textContent = p.tiktok;
+  document.getElementById('chip-tiktok').href = 'https://www.tiktok.com/@' + p.tiktok;
 
   const av = document.querySelector('.avatar');
   const initials = document.querySelector('.avatar-initials');
@@ -1089,6 +1104,20 @@ function renderProfile() {
   } else {
     av.style.display = 'none';
     initials.style.display = 'flex';
+  }
+
+  updateFavicon(hasAvatar ? p.avatar : '');
+}
+
+function updateFavicon(avatarUrl) {
+  const fav = document.getElementById('pwa-favicon');
+  const appleIcon = document.getElementById('pwa-apple-icon');
+  if (avatarUrl) {
+    fav.setAttribute('href', avatarUrl);
+    fav.setAttribute('type', 'image/png');
+    if (appleIcon) appleIcon.setAttribute('href', avatarUrl);
+  } else {
+    fav.removeAttribute('href');
   }
 }
 
