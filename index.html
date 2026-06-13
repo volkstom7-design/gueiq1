@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>عبدالله مساعد </title>
+  <meta name="theme-color" content="#1D9E75" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="عبدالله مساعد" />
+  <link rel="manifest" id="pwa-manifest" />
+  <link rel="apple-touch-icon" id="pwa-apple-icon" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -168,7 +174,11 @@
     .app-btn:hover { transform:translateY(-2px); opacity:.92; }
     .app-btn-android { background:#fff; color:#111; }
     .app-btn-ios     { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25); }
-    .app-btn svg { width:20px; height:20px; flex-shrink:0; }
+    .app-btn-install { background: #1D9E75; color: #fff; }
+    .app-btn-install:hover { opacity: .9; }
+    .ios-install-tip { display:none; margin-top:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:12px; padding:12px 14px; font-size:12px; color:rgba(255,255,255,.85); line-height:1.9; }
+    .ios-install-tip.show { display:block; }
+    .ios-install-tip b { color:#fff; }
 
     @media (max-width: 520px) {
       .hero { flex-direction: column; text-align: center; }
@@ -514,6 +524,12 @@
           </svg>
           <span id="instagram-display">YOUR_INSTAGRAM_HERE</span>
         </a>
+        <a class="contact-chip" id="chip-telegram" href="https://t.me/YOUR_TELEGRAM_HERE" target="_blank" style="color:#229ED9;">
+          <svg viewBox="0 0 24 24" fill="#229ED9" width="13" height="13">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.186 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212-.07-.063-.174-.041-.249-.024-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.373-1.297-.787.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.362 4.025-1.598 4.476-1.606.099-.002.321.023.464.139.119.097.152.227.169.319.018.099.04.265.024.408z"/>
+          </svg>
+          <span id="telegram-display">YOUR_TELEGRAM_HERE</span>
+        </a>
       </div>
     </div>
   </div>
@@ -670,6 +686,7 @@
             </div>
           </div>
           <div class="admin-field"><label>انستغرام (اسم المستخدم)</label><input type="text" id="p-instagram" /></div>
+          <div class="admin-field"><label>تيليجرام (اسم المستخدم بدون @)</label><input type="text" id="p-telegram" placeholder="username" /></div>
           <button class="btn-save" onclick="saveProfile()">💾 حفظ</button>
         </div>
       </div>
@@ -772,7 +789,8 @@ let DATA = {
     phone: 'YOUR_PHONE_HERE',
     whatsapp: '9647XXXXXXXXX',
     avatar: 'YOUR_PHOTO_URL_HERE',
-    instagram: 'YOUR_INSTAGRAM_HERE'
+    instagram: 'YOUR_INSTAGRAM_HERE',
+    telegram: 'YOUR_TELEGRAM_HERE'
   },
   books: [
     { id: 'GUE', key: 'GUE', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'GUE — General Urine Examination', sub: 'فحص البول العام', coverGrad: 'linear-gradient(135deg,#1D9E75,#085041)', desc: 'كتاب متخصص يغطي جميع جوانب فحص البول العام بأسلوب علمي حديث ومبسّط. يربط المفاهيم النظرية بالتطبيق العملي داخل المختبر.', features: ['تفسير شامل لنتائج فحص البول','ربط النتائج بالحالات السريرية','صور توضيحية ومخططات علمية'], isNew: true },
@@ -1022,6 +1040,7 @@ function populateProfileForm() {
   document.getElementById('p-whatsapp').value = p.whatsapp;
   document.getElementById('p-avatar').value = p.avatar;
   document.getElementById('p-instagram').value = p.instagram;
+  document.getElementById('p-telegram').value = p.telegram || '';
   // show avatar preview if URL exists
   if (p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE') {
     const wrap = document.getElementById('avatar-preview');
@@ -1037,6 +1056,7 @@ async function saveProfile() {
   DATA.profile.whatsapp = document.getElementById('p-whatsapp').value;
   DATA.profile.avatar = document.getElementById('p-avatar').value;
   DATA.profile.instagram = document.getElementById('p-instagram').value;
+  DATA.profile.telegram = document.getElementById('p-telegram').value;
   await saveData(); renderProfile();
   showSuccess('profile-success');
 }
@@ -1052,6 +1072,8 @@ function renderProfile() {
   document.getElementById('phone-display').textContent = p.phone;
   document.getElementById('instagram-display').textContent = p.instagram;
   document.getElementById('chip-instagram').href = 'https://instagram.com/' + p.instagram;
+  document.getElementById('telegram-display').textContent = p.telegram;
+  document.getElementById('chip-telegram').href = 'https://t.me/' + p.telegram;
 
   const av = document.querySelector('.avatar');
   const initials = document.querySelector('.avatar-initials');
@@ -2076,6 +2098,11 @@ function renderApp() {
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       App Store
     </a>` : '';
+  const installBtn = `
+    <button class="app-btn app-btn-install" id="pwa-install-btn" onclick="handlePwaInstallClick()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span id="pwa-install-label">تثبيت الموقع كتطبيق</span>
+    </button>`;
   wrap.innerHTML = `
     <div class="section-label">التطبيق</div>
     <div class="app-section">
@@ -2083,9 +2110,13 @@ function renderApp() {
       <div class="app-title">${a.title}</div>
       <div class="app-sub">${a.sub}</div>
       <div class="app-features">${feats}</div>
-      <div class="app-btns">${androidBtn}${iosBtn}</div>
+      <div class="app-btns">${androidBtn}${iosBtn}${installBtn}</div>
+      <div class="ios-install-tip" id="ios-install-tip">
+        لتثبيت التطبيق على آيفون: اضغط على زر <b>المشاركة</b> 〈⬆️〉 في متصفح Safari، ثم اختر <b>"إضافة إلى الشاشة الرئيسية"</b> (Add to Home Screen).
+      </div>
     </div>
     <div class="divider"></div>`;
+  setupPwaInstall();
 }
 
 function populateAppForm() {
@@ -2382,7 +2413,117 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ===== INIT =====
+// ===== PWA INSTALL =====
+let _deferredInstallPrompt = null;
+let _pwaSetupDone = false;
+
+function isIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function isInStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function setupPwaManifestAndSW() {
+  // Build a dynamic manifest using the avatar as icon (falls back to a generated icon)
+  const p = (DATA && DATA.profile) || {};
+  const name = p.name || 'عبدالله مساعد';
+  let iconUrl = (p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE' && p.avatar.trim() !== '') ? p.avatar : '';
+
+  const manifest = {
+    name: name,
+    short_name: name,
+    start_url: location.href.split('#')[0],
+    scope: location.href.split('#')[0],
+    display: 'standalone',
+    background_color: '#ffffff',
+    theme_color: '#1D9E75',
+    icons: iconUrl ? [
+      { src: iconUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+      { src: iconUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+    ] : []
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  const manifestUrl = URL.createObjectURL(manifestBlob);
+  const link = document.getElementById('pwa-manifest');
+  if (link) link.setAttribute('href', manifestUrl);
+
+  const appleIcon = document.getElementById('pwa-apple-icon');
+  if (appleIcon && iconUrl) appleIcon.setAttribute('href', iconUrl);
+
+  // Register a minimal service worker (required by some browsers for installability)
+  if ('serviceWorker' in navigator && !_pwaSetupDone) {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => self.clients.claim());
+      self.addEventListener('fetch', e => {});
+    `;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+  }
+  _pwaSetupDone = true;
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  updatePwaInstallUI();
+});
+
+window.addEventListener('appinstalled', () => {
+  _deferredInstallPrompt = null;
+  updatePwaInstallUI();
+});
+
+function updatePwaInstallUI() {
+  const btn = document.getElementById('pwa-install-btn');
+  const label = document.getElementById('pwa-install-label');
+  const tip = document.getElementById('ios-install-tip');
+  if (!btn) return;
+
+  if (isInStandaloneMode()) {
+    btn.style.display = 'none';
+    if (tip) tip.classList.remove('show');
+    return;
+  }
+
+  if (isIOS()) {
+    label.textContent = 'تثبيت التطبيق على آيفون';
+    btn.style.display = 'flex';
+    return;
+  }
+
+  if (_deferredInstallPrompt) {
+    label.textContent = 'تثبيت الموقع كتطبيق';
+    btn.style.display = 'flex';
+  } else {
+    // Browser doesn't support / already handled — hide to avoid dead button
+    btn.style.display = 'none';
+  }
+}
+
+async function handlePwaInstallClick() {
+  if (isIOS()) {
+    const tip = document.getElementById('ios-install-tip');
+    if (tip) tip.classList.toggle('show');
+    return;
+  }
+  if (_deferredInstallPrompt) {
+    _deferredInstallPrompt.prompt();
+    const { outcome } = await _deferredInstallPrompt.userChoice;
+    _deferredInstallPrompt = null;
+    updatePwaInstallUI();
+  }
+}
+
+function setupPwaInstall() {
+  setupPwaManifestAndSW();
+  updatePwaInstallUI();
+}
+
+
 (async () => {
   document.body.insertAdjacentHTML('afterbegin',
     '<div id="loading-screen" style="position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px;">' +
