@@ -1112,13 +1112,52 @@ function renderProfile() {
 function updateFavicon(avatarUrl) {
   const fav = document.getElementById('pwa-favicon');
   const appleIcon = document.getElementById('pwa-apple-icon');
-  if (avatarUrl) {
-    fav.setAttribute('href', avatarUrl);
-    fav.setAttribute('type', 'image/png');
-    if (appleIcon) appleIcon.setAttribute('href', avatarUrl);
-  } else {
+  if (!avatarUrl) {
     fav.removeAttribute('href');
+    return;
   }
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    const size = 128;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // circular clip
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+
+    // object-fit: cover — center-crop the image to fill the circle
+    const ratio = Math.max(size / img.width, size / img.height);
+    const drawW = img.width * ratio;
+    const drawH = img.height * ratio;
+    const dx = (size - drawW) / 2;
+    const dy = (size - drawH) / 2;
+    ctx.drawImage(img, dx, dy, drawW, drawH);
+    ctx.restore();
+
+    try {
+      const dataUrl = canvas.toDataURL('image/png');
+      fav.setAttribute('href', dataUrl);
+      fav.setAttribute('type', 'image/png');
+      if (appleIcon) appleIcon.setAttribute('href', dataUrl);
+    } catch (e) {
+      // CORS-tainted canvas — fall back to original image
+      fav.setAttribute('href', avatarUrl);
+      fav.setAttribute('type', 'image/png');
+      if (appleIcon) appleIcon.setAttribute('href', avatarUrl);
+    }
+  };
+  img.onerror = function() {
+    fav.removeAttribute('href');
+  };
+  img.src = avatarUrl;
 }
 
 function renderBooks() {
