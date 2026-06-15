@@ -219,12 +219,12 @@
     /* Cart Modal */
     .cart-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; align-items: flex-end; justify-content: center; }
     .cart-backdrop.open { display: flex; }
-    .cart-modal { background: #fff; border-radius: 24px 24px 0 0; width: 100%; max-width: 520px; max-height: 90vh; display: flex; flex-direction: column; animation: slideUp 0.28s ease; }
+    .cart-modal { background: #fff; border-radius: 24px 24px 0 0; width: 100%; max-width: 520px; max-height: 88vh; display: flex; flex-direction: column; animation: slideUp 0.28s ease; overflow: hidden; }
     .cart-header { padding: 1.25rem 1.5rem 1rem; border-bottom: 0.5px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
     .cart-title { font-size: 18px; font-weight: 700; color: #111; display: flex; align-items: center; gap: 8px; }
     .cart-close { background: #f0f0f0; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px; color: #666; display: flex; align-items: center; justify-content: center; }
     .cart-close:hover { color: #111; }
-    .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+    .cart-scroll { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; min-height: 0; }
     .cart-empty { text-align: center; padding: 3rem 1rem; color: #aaa; }
     .cart-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .cart-empty p { font-size: 14px; }
@@ -239,7 +239,6 @@
     .qty-num { font-size: 14px; font-weight: 700; color: #111; min-width: 20px; text-align: center; }
     .cart-delete { background: none; border: none; cursor: pointer; color: #ccc; font-size: 18px; padding: 4px; transition: color 0.15s; flex-shrink: 0; }
     .cart-delete:hover { color: #D85A30; }
-    .cart-footer { padding: 1rem 1.5rem 1.5rem; border-top: 0.5px solid #e5e5e5; flex-shrink: 0; }
     .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .cart-total-label { font-size: 14px; color: #666; }
     .cart-total-val { font-size: 22px; font-weight: 800; color: #1D9E75; }
@@ -543,6 +542,26 @@
     body.dark .card-price { color: #1D9E75; }
 
     body.dark .theme-toggle { background: #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+
+    body.dark .cart-modal { background: #1a1a1a; }
+    body.dark .cart-header { border-bottom-color: #2a2a2a; }
+    body.dark .cart-title { color: #f0f0f0; }
+    body.dark .cart-close { background: #2a2a2a; color: #aaa; }
+    body.dark .cart-item { border-bottom-color: #2a2a2a; }
+    body.dark .cart-item-name { color: #f0f0f0; }
+    body.dark .qty-btn { background: #2a2a2a; border-color: #3a3a3a; color: #ccc; }
+    body.dark .qty-num { color: #f0f0f0; }
+    body.dark .cart-total-label { color: #aaa; }
+    body.dark .cart-order-form { background: #111; }
+    body.dark .cart-order-form h3 { color: #f0f0f0; }
+    body.dark .cart-grand-row { border-top-color: #2a2a2a; }
+    body.dark .cart-grand-label { color: #aaa; }
+    body.dark .delivery-selector label { color: #aaa; }
+    body.dark .delivery-opt { background: #2a2a2a; border-color: #3a3a3a; }
+    body.dark .delivery-opt .d-name { color: #f0f0f0; }
+    body.dark .delivery-opt .d-price { color: #aaa; }
+    body.dark .delivery-opt.selected { background: #0d3028; border-color: #1D9E75; }
+    body.dark .delivery-opt.selected .d-name { color: #1D9E75; }
   </style>
 </head>
 <body>
@@ -658,54 +677,62 @@
       </div>
       <button class="cart-close" onclick="closeCart()">✕</button>
     </div>
-    <div class="cart-body" id="cart-body">
+
+    <!-- Single scrollable area for everything -->
+    <div class="cart-scroll" id="cart-scroll">
+      <!-- Empty state -->
       <div class="cart-empty" id="cart-empty">
         <div class="cart-empty-icon">🛒</div>
         <p>سلتك فارغة<br/>أضف منتجات لتبدأ طلبك</p>
       </div>
-      <div id="cart-items-list"></div>
-    </div>
-    <div class="cart-footer" id="cart-footer" style="display:none;">
-      <div class="cart-total-row">
-        <span class="cart-total-label">مجموع المنتجات:</span>
-        <span class="cart-total-val" id="cart-total">0 د.ع</span>
-      </div>
 
-      <!-- Delivery selector -->
-      <div class="delivery-selector">
-        <label>🚚 اختر منطقة التوصيل:</label>
-        <div class="delivery-options">
-          <div class="delivery-opt selected" id="dopt-baghdad" onclick="selectDelivery('baghdad', 5000)">
-            <div class="d-icon">🏙️</div>
-            <div class="d-name">بغداد</div>
-            <div class="d-price">5,000 د.ع</div>
-          </div>
-          <div class="delivery-opt" id="dopt-provinces" onclick="selectDelivery('provinces', 6000)">
-            <div class="d-icon">🗺️</div>
-            <div class="d-name">المحافظات</div>
-            <div class="d-price">6,000 د.ع</div>
+      <!-- Items list -->
+      <div id="cart-items-list"></div>
+
+      <!-- Footer (totals + delivery + form) — hidden when empty -->
+      <div id="cart-footer" style="display:none; padding-bottom: 1.5rem;">
+        <div style="height:0.5px;background:#e5e5e5;margin:0 0 14px;"></div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">مجموع المنتجات:</span>
+          <span class="cart-total-val" id="cart-total">0 د.ع</span>
+        </div>
+
+        <!-- Delivery selector -->
+        <div class="delivery-selector">
+          <label>🚚 اختر منطقة التوصيل:</label>
+          <div class="delivery-options">
+            <div class="delivery-opt selected" id="dopt-baghdad" onclick="selectDelivery('baghdad', 5000)">
+              <div class="d-icon">🏙️</div>
+              <div class="d-name">بغداد</div>
+              <div class="d-price">5,000 د.ع</div>
+            </div>
+            <div class="delivery-opt" id="dopt-provinces" onclick="selectDelivery('provinces', 6000)">
+              <div class="d-icon">🗺️</div>
+              <div class="d-name">المحافظات</div>
+              <div class="d-price">6,000 د.ع</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Grand total (products + delivery) -->
-      <div class="cart-grand-row">
-        <span class="cart-grand-label">المجموع الكلي (شامل التوصيل):</span>
-        <span class="cart-grand-val" id="cart-grand-total">0 د.ع</span>
-      </div>
+        <!-- Grand total -->
+        <div class="cart-grand-row">
+          <span class="cart-grand-label">المجموع الكلي (شامل التوصيل):</span>
+          <span class="cart-grand-val" id="cart-grand-total">0 د.ع</span>
+        </div>
 
-      <div class="cart-order-form">
-        <h3>📝 بيانات التوصيل</h3>
-        <div class="form-group"><label>اسمك الكريم</label><input type="text" id="cart-f-name" placeholder="عبد الرحمن علي..." /></div>
-        <div class="form-group"><label>عنوانك (المحافظة / المنطقة)</label><input type="text" id="cart-f-addr" placeholder="بغداد - الكرخ..." /></div>
-        <div class="form-group"><label>رقم هاتفك</label><input type="tel" id="cart-f-phone" placeholder="07xxxxxxxxx" /></div>
-        <button class="cart-checkout-btn" onclick="sendCartOrder()">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.054 23.454a.75.75 0 00.918.918l5.598-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.524-5.186-1.437l-.372-.22-3.863 1.02 1.02-3.863-.22-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-          إتمام الطلب عبر واتساب
-        </button>
-        <button class="cart-clear-btn" onclick="clearCart()">🗑 تفريغ السلة</button>
+        <div class="cart-order-form">
+          <h3>📝 بيانات التوصيل</h3>
+          <div class="form-group"><label>اسمك الكريم</label><input type="text" id="cart-f-name" placeholder="عبد الرحمن علي..." /></div>
+          <div class="form-group"><label>عنوانك (المحافظة / المنطقة)</label><input type="text" id="cart-f-addr" placeholder="بغداد - الكرخ..." /></div>
+          <div class="form-group"><label>رقم هاتفك</label><input type="tel" id="cart-f-phone" placeholder="07xxxxxxxxx" /></div>
+          <button class="cart-checkout-btn" onclick="sendCartOrder()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.054 23.454a.75.75 0 00.918.918l5.598-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.524-5.186-1.437l-.372-.22-3.863 1.02 1.02-3.863-.22-.372A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            إتمام الطلب عبر واتساب
+          </button>
+          <button class="cart-clear-btn" onclick="clearCart()">🗑 تفريغ السلة</button>
+        </div>
       </div>
-    </div>
+    </div><!-- end cart-scroll -->
   </div>
 </div>
 
