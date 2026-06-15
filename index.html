@@ -261,6 +261,20 @@
     /* Cart item count badge on header */
     .cart-count-pill { display: inline-flex; align-items: center; justify-content: center; background: #E1F5EE; color: #085041; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-right: 6px; }
 
+    /* Delivery selector */
+    .delivery-selector { margin-bottom: 14px; }
+    .delivery-selector label { display: block; font-size: 13px; color: #555; margin-bottom: 8px; font-weight: 600; }
+    .delivery-options { display: flex; gap: 8px; }
+    .delivery-opt { flex: 1; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 10px 8px; cursor: pointer; text-align: center; transition: all 0.18s; background: #fafafa; }
+    .delivery-opt:hover { border-color: #1D9E75; background: #f0fbf7; }
+    .delivery-opt.selected { border-color: #1D9E75; background: #E1F5EE; }
+    .delivery-opt .d-icon { font-size: 20px; margin-bottom: 4px; }
+    .delivery-opt .d-name { font-size: 12px; font-weight: 700; color: #111; }
+    .delivery-opt .d-price { font-size: 11px; color: #1D9E75; font-weight: 600; margin-top: 2px; }
+    .cart-grand-row { display: flex; justify-content: space-between; align-items: center; background: #E1F5EE; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
+    .cart-grand-label { font-size: 13px; color: #085041; font-weight: 600; }
+    .cart-grand-val { font-size: 20px; font-weight: 800; color: #085041; }
+
     /* ===== CLOUDINARY UPLOAD BUTTON ===== */
     .upload-btn { display: inline-flex; align-items: center; gap: 6px; background: #f0f7ff; color: #1a5fa8; border: 1px solid #b3d1f7; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Tajawal', sans-serif; margin-top: 6px; transition: background 0.15s; }
     .upload-btn:hover { background: #dbeafe; }
@@ -653,9 +667,33 @@
     </div>
     <div class="cart-footer" id="cart-footer" style="display:none;">
       <div class="cart-total-row">
-        <span class="cart-total-label">المجموع الكلي:</span>
+        <span class="cart-total-label">مجموع المنتجات:</span>
         <span class="cart-total-val" id="cart-total">0 د.ع</span>
       </div>
+
+      <!-- Delivery selector -->
+      <div class="delivery-selector">
+        <label>🚚 اختر منطقة التوصيل:</label>
+        <div class="delivery-options">
+          <div class="delivery-opt selected" id="dopt-baghdad" onclick="selectDelivery('baghdad', 5000)">
+            <div class="d-icon">🏙️</div>
+            <div class="d-name">بغداد</div>
+            <div class="d-price">5,000 د.ع</div>
+          </div>
+          <div class="delivery-opt" id="dopt-provinces" onclick="selectDelivery('provinces', 6000)">
+            <div class="d-icon">🗺️</div>
+            <div class="d-name">المحافظات</div>
+            <div class="d-price">6,000 د.ع</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grand total (products + delivery) -->
+      <div class="cart-grand-row">
+        <span class="cart-grand-label">المجموع الكلي (شامل التوصيل):</span>
+        <span class="cart-grand-val" id="cart-grand-total">0 د.ع</span>
+      </div>
+
       <div class="cart-order-form">
         <h3>📝 بيانات التوصيل</h3>
         <div class="form-group"><label>اسمك الكريم</label><input type="text" id="cart-f-name" placeholder="عبد الرحمن علي..." /></div>
@@ -2555,31 +2593,68 @@ document.addEventListener('keydown', e => {
 // ===================================================
 
 let CART = [];
+let DELIVERY = { key: 'baghdad', name: 'بغداد', fee: 5000 };
 
 function cartLoad() {
   try {
     const saved = localStorage.getItem('abid_cart');
     if (saved) CART = JSON.parse(saved);
+    const savedDelivery = localStorage.getItem('abid_delivery');
+    if (savedDelivery) DELIVERY = JSON.parse(savedDelivery);
   } catch(e) { CART = []; }
   cartUpdateUI();
 }
 
 function cartSave() {
   localStorage.setItem('abid_cart', JSON.stringify(CART));
+  localStorage.setItem('abid_delivery', JSON.stringify(DELIVERY));
+}
+
+function selectDelivery(key, fee) {
+  const names = { baghdad: 'بغداد', provinces: 'المحافظات' };
+  DELIVERY = { key, name: names[key] || key, fee };
+  cartSave();
+  // Update UI selection
+  document.querySelectorAll('.delivery-opt').forEach(el => el.classList.remove('selected'));
+  const sel = document.getElementById('dopt-' + key);
+  if (sel) sel.classList.add('selected');
+  // Recalculate totals
+  cartUpdateTotals();
+}
+
+function cartUpdateTotals() {
+  const totalEl = document.getElementById('cart-total');
+  const grandEl = document.getElementById('cart-grand-total');
+  let productsTotal = 0;
+  let hasPrice = false;
+  CART.forEach(item => {
+    if (item.price) {
+      const nums = item.price.replace(/,/g, '').match(/\d+/g);
+      if (nums) { productsTotal += parseInt(nums[0]) * item.qty; hasPrice = true; }
+    }
+  });
+  if (totalEl) {
+    totalEl.style.fontSize = '';
+    totalEl.textContent = hasPrice ? productsTotal.toLocaleString('ar-IQ') + ' د.ع' : 'السعر يحدد لاحقاً';
+    if (!hasPrice) totalEl.style.fontSize = '13px';
+  }
+  if (grandEl) {
+    if (hasPrice) {
+      const grand = productsTotal + DELIVERY.fee;
+      grandEl.textContent = grand.toLocaleString('ar-IQ') + ' د.ع';
+    } else {
+      grandEl.textContent = 'السعر يحدد لاحقاً + ' + DELIVERY.fee.toLocaleString('ar-IQ') + ' د.ع توصيل';
+      grandEl.style.fontSize = '13px';
+    }
+  }
 }
 
 function cartUpdateUI() {
   const total = CART.reduce((s, i) => s + i.qty, 0);
-  // FAB badge
   const badge = document.getElementById('cart-badge');
-  if (badge) {
-    badge.textContent = total;
-    badge.classList.toggle('show', total > 0);
-  }
-  // Pill in header
+  if (badge) { badge.textContent = total; badge.classList.toggle('show', total > 0); }
   const pill = document.getElementById('cart-count-pill');
   if (pill) pill.textContent = total;
-  // Render items
   cartRenderItems();
 }
 
@@ -2587,7 +2662,6 @@ function cartRenderItems() {
   const listEl = document.getElementById('cart-items-list');
   const emptyEl = document.getElementById('cart-empty');
   const footerEl = document.getElementById('cart-footer');
-  const totalEl = document.getElementById('cart-total');
   if (!listEl) return;
 
   if (CART.length === 0) {
@@ -2597,7 +2671,6 @@ function cartRenderItems() {
     return;
   }
 
-  // Hide empty state, show footer
   if (emptyEl) emptyEl.style.display = 'none';
   if (footerEl) footerEl.style.display = '';
 
@@ -2615,27 +2688,12 @@ function cartRenderItems() {
       <button class="cart-delete" onclick="cartRemove(${idx})" title="حذف">🗑</button>
     </div>`).join('');
 
-  // Calculate total
-  let grandTotal = 0;
-  let hasPrice = false;
-  CART.forEach(item => {
-    if (item.price) {
-      const nums = item.price.replace(/,/g, '').match(/\d+/g);
-      if (nums) {
-        grandTotal += parseInt(nums[0]) * item.qty;
-        hasPrice = true;
-      }
-    }
-  });
-  if (totalEl) {
-    totalEl.style.fontSize = '';
-    if (hasPrice) {
-      totalEl.textContent = grandTotal.toLocaleString('ar-IQ') + ' د.ع';
-    } else {
-      totalEl.textContent = 'السعر يحدد عبر واتساب';
-      totalEl.style.fontSize = '14px';
-    }
-  }
+  // Sync delivery UI selection
+  document.querySelectorAll('.delivery-opt').forEach(el => el.classList.remove('selected'));
+  const selEl = document.getElementById('dopt-' + DELIVERY.key);
+  if (selEl) selEl.classList.add('selected');
+
+  cartUpdateTotals();
 }
 
 function escHtml(str) {
@@ -2739,27 +2797,35 @@ function sendCartOrder() {
 
   // Build items list
   let itemsText = '';
-  let grandTotal = 0;
+  let productsTotal = 0;
   let hasPrice = false;
   CART.forEach((item, i) => {
     const nums = (item.price||'').replace(/,/g, '').match(/\d+/g);
     let lineTotal = '';
     if (nums) {
       const lineAmt = parseInt(nums[0]) * item.qty;
-      grandTotal += lineAmt;
+      productsTotal += lineAmt;
       lineTotal = ` | المجموع: ${lineAmt.toLocaleString('ar-IQ')} د.ع`;
       hasPrice = true;
     }
     itemsText += `\n${i+1}. ${item.name}\n   الكمية: ${item.qty} | السعر: ${item.price||'يحدد لاحقاً'}${lineTotal}`;
   });
 
-  const totalLine = hasPrice ? `\n\n💰 المجموع الكلي: ${grandTotal.toLocaleString('ar-IQ')} د.ع` : '';
+  let totalSection = '';
+  if (hasPrice) {
+    const grand = productsTotal + DELIVERY.fee;
+    totalSection = `\n\n💰 مجموع المنتجات: ${productsTotal.toLocaleString('ar-IQ')} د.ع` +
+                   `\n🚚 أجرة التوصيل (${DELIVERY.name}): ${DELIVERY.fee.toLocaleString('ar-IQ')} د.ع` +
+                   `\n✅ المجموع الكلي: ${grand.toLocaleString('ar-IQ')} د.ع`;
+  } else {
+    totalSection = `\n\n🚚 منطقة التوصيل: ${DELIVERY.name} (${DELIVERY.fee.toLocaleString('ar-IQ')} د.ع)`;
+  }
 
-  const text = `🛒 طلب جديد من الموقع\n${'─'.repeat(28)}\n👤 الاسم: ${name}\n📍 العنوان: ${addr}\n📞 الهاتف: ${phone}\n${'─'.repeat(28)}\n📦 المنتجات:${itemsText}${totalLine}\n${'─'.repeat(28)}`;
+  const text = `🛒 طلب جديد من الموقع\n${'─'.repeat(28)}\n👤 الاسم: ${name}\n📍 العنوان: ${addr}\n📞 الهاتف: ${phone}\n${'─'.repeat(28)}\n📦 المنتجات:${itemsText}${totalSection}\n${'─'.repeat(28)}`;
 
   window.open(`https://wa.me/${DATA.profile.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
 
-  // Show success then clear
+  // Show success
   const cartBody = document.getElementById('cart-body');
   const cartFooter = document.getElementById('cart-footer');
   if (cartBody) cartBody.innerHTML = `
@@ -2770,12 +2836,11 @@ function sendCartOrder() {
     </div>`;
   if (cartFooter) cartFooter.style.display = 'none';
 
-  // Clear cart after 3 seconds
+  // Clear cart after 3s
   setTimeout(() => {
     CART = [];
     cartSave();
     cartUpdateUI();
-    // Re-render cart body
     const bodyEl = document.getElementById('cart-body');
     if (bodyEl) {
       bodyEl.innerHTML = `
