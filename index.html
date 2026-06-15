@@ -566,6 +566,18 @@
           </svg>
           <span id="instagram-display">YOUR_INSTAGRAM_HERE</span>
         </a>
+        <a class="contact-chip" id="chip-tiktok" href="#" target="_blank" style="color:#010101;display:none;">
+          <svg viewBox="0 0 24 24" fill="#010101" width="13" height="13">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.2 8.2 0 004.79 1.53V6.77a4.85 4.85 0 01-1.02-.08z"/>
+          </svg>
+          <span id="tiktok-display"></span>
+        </a>
+        <a class="contact-chip" id="chip-telegram" href="#" target="_blank" style="color:#229ED9;display:none;">
+          <svg viewBox="0 0 24 24" fill="#229ED9" width="13" height="13">
+            <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          <span id="telegram-display"></span>
+        </a>
       </div>
     </div>
   </div>
@@ -767,7 +779,9 @@
               <img id="avatar-preview-img" src="" alt="معاينة" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #1D9E75;" onerror="this.parentElement.style.display='none'" />
             </div>
           </div>
-          <div class="admin-field"><label>انستغرام (اسم المستخدم)</label><input type="text" id="p-instagram" /></div>
+          <div class="admin-field"><label>انستغرام (اسم المستخدم)</label><input type="text" id="p-instagram" placeholder="مثال: abdulla_lab" /></div>
+          <div class="admin-field"><label>تيك توك (اسم المستخدم)</label><input type="text" id="p-tiktok" placeholder="مثال: abdulla_lab" /></div>
+          <div class="admin-field"><label>تيليغرام (اسم المستخدم أو رابط المجموعة)</label><input type="text" id="p-telegram" placeholder="مثال: abdulla_lab أو https://t.me/abdulla_lab" /></div>
           <button class="btn-save" onclick="saveProfile()">💾 حفظ</button>
         </div>
       </div>
@@ -870,7 +884,9 @@ let DATA = {
     phone: 'YOUR_PHONE_HERE',
     whatsapp: '9647XXXXXXXXX',
     avatar: 'YOUR_PHOTO_URL_HERE',
-    instagram: 'YOUR_INSTAGRAM_HERE'
+    instagram: 'YOUR_INSTAGRAM_HERE',
+    tiktok: '',
+    telegram: ''
   },
   books: [
     { id: 'GUE', key: 'GUE', badge: 'كتاب مختبري', badgeClass: 'modal-badge-teal', title: 'GUE — General Urine Examination', sub: 'فحص البول العام', coverGrad: 'linear-gradient(135deg,#1D9E75,#085041)', desc: 'كتاب متخصص يغطي جميع جوانب فحص البول العام بأسلوب علمي حديث ومبسّط. يربط المفاهيم النظرية بالتطبيق العملي داخل المختبر.', features: ['تفسير شامل لنتائج فحص البول','ربط النتائج بالحالات السريرية','صور توضيحية ومخططات علمية'], isNew: true },
@@ -1119,7 +1135,9 @@ function populateProfileForm() {
   document.getElementById('p-phone').value = p.phone;
   document.getElementById('p-whatsapp').value = p.whatsapp;
   document.getElementById('p-avatar').value = p.avatar;
-  document.getElementById('p-instagram').value = p.instagram;
+  document.getElementById('p-instagram').value = p.instagram || '';
+  document.getElementById('p-tiktok').value = p.tiktok || '';
+  document.getElementById('p-telegram').value = p.telegram || '';
   // show avatar preview if URL exists
   if (p.avatar && p.avatar !== 'YOUR_PHOTO_URL_HERE') {
     const wrap = document.getElementById('avatar-preview');
@@ -1135,6 +1153,8 @@ async function saveProfile() {
   DATA.profile.whatsapp = document.getElementById('p-whatsapp').value;
   DATA.profile.avatar = document.getElementById('p-avatar').value;
   DATA.profile.instagram = document.getElementById('p-instagram').value;
+  DATA.profile.tiktok = document.getElementById('p-tiktok').value;
+  DATA.profile.telegram = document.getElementById('p-telegram').value;
   await saveData(); renderProfile();
   showSuccess('profile-success');
 }
@@ -1150,6 +1170,32 @@ function renderProfile() {
   document.getElementById('phone-display').textContent = p.phone;
   document.getElementById('instagram-display').textContent = p.instagram;
   document.getElementById('chip-instagram').href = 'https://instagram.com/' + p.instagram;
+
+  // TikTok chip
+  const tiktokChip = document.getElementById('chip-tiktok');
+  const tiktokDisplay = document.getElementById('tiktok-display');
+  if (p.tiktok && p.tiktok.trim()) {
+    const ttHandle = p.tiktok.trim().replace(/^@/, '');
+    tiktokDisplay.textContent = '@' + ttHandle;
+    tiktokChip.href = 'https://www.tiktok.com/@' + ttHandle;
+    tiktokChip.style.display = '';
+  } else {
+    tiktokChip.style.display = 'none';
+  }
+
+  // Telegram chip
+  const tgChip = document.getElementById('chip-telegram');
+  const tgDisplay = document.getElementById('telegram-display');
+  if (p.telegram && p.telegram.trim()) {
+    const tg = p.telegram.trim();
+    const tgHandle = tg.startsWith('http') ? tg : ('https://t.me/' + tg.replace(/^@/, ''));
+    const tgLabel = tg.startsWith('http') ? 'تيليغرام' : ('@' + tg.replace(/^@/, ''));
+    tgDisplay.textContent = tgLabel;
+    tgChip.href = tgHandle;
+    tgChip.style.display = '';
+  } else {
+    tgChip.style.display = 'none';
+  }
 
   const av = document.querySelector('.avatar');
   const initials = document.querySelector('.avatar-initials');
@@ -2551,6 +2597,7 @@ function cartRenderItems() {
     return;
   }
 
+  // Hide empty state, show footer
   if (emptyEl) emptyEl.style.display = 'none';
   if (footerEl) footerEl.style.display = '';
 
@@ -2568,7 +2615,7 @@ function cartRenderItems() {
       <button class="cart-delete" onclick="cartRemove(${idx})" title="حذف">🗑</button>
     </div>`).join('');
 
-  // Calculate total (extract numbers from price strings)
+  // Calculate total
   let grandTotal = 0;
   let hasPrice = false;
   CART.forEach(item => {
@@ -2581,6 +2628,7 @@ function cartRenderItems() {
     }
   });
   if (totalEl) {
+    totalEl.style.fontSize = '';
     if (hasPrice) {
       totalEl.textContent = grandTotal.toLocaleString('ar-IQ') + ' د.ع';
     } else {
@@ -2657,6 +2705,19 @@ function clearCart() {
 }
 
 function openCart() {
+  // Always reset cart body structure to ensure elements exist
+  const cartBody = document.getElementById('cart-body');
+  if (cartBody) {
+    cartBody.innerHTML = `
+      <div class="cart-empty" id="cart-empty" style="display:none;">
+        <div class="cart-empty-icon">🛒</div>
+        <p>سلتك فارغة<br/>أضف منتجات لتبدأ طلبك</p>
+      </div>
+      <div id="cart-items-list"></div>`;
+  }
+  // Reset footer visibility
+  const footerEl = document.getElementById('cart-footer');
+  if (footerEl) footerEl.style.display = 'none';
   cartRenderItems();
   document.getElementById('cart-backdrop').classList.add('open');
 }
