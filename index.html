@@ -2763,21 +2763,9 @@ function clearCart() {
 }
 
 function openCart() {
-  // Always reset cart body structure to ensure elements exist
-  const cartBody = document.getElementById('cart-body');
-  if (cartBody) {
-    cartBody.innerHTML = `
-      <div class="cart-empty" id="cart-empty" style="display:none;">
-        <div class="cart-empty-icon">🛒</div>
-        <p>سلتك فارغة<br/>أضف منتجات لتبدأ طلبك</p>
-      </div>
-      <div id="cart-items-list"></div>`;
-  }
-  // Reset footer visibility
-  const footerEl = document.getElementById('cart-footer');
-  if (footerEl) footerEl.style.display = 'none';
-  cartRenderItems();
   document.getElementById('cart-backdrop').classList.add('open');
+  // Small delay to ensure modal is visible before rendering
+  setTimeout(cartRenderItems, 30);
 }
 
 function closeCart() {
@@ -2825,31 +2813,38 @@ function sendCartOrder() {
 
   window.open(`https://wa.me/${DATA.profile.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
 
-  // Show success
+  // Show success message INSIDE cart-body without destroying its structure
   const cartBody = document.getElementById('cart-body');
   const cartFooter = document.getElementById('cart-footer');
-  if (cartBody) cartBody.innerHTML = `
-    <div style="text-align:center;padding:3rem 1rem;">
-      <div style="width:72px;height:72px;background:#E1F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:36px;">✓</div>
-      <div style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px;">تم إرسال طلبك!</div>
-      <div style="font-size:14px;color:#666;line-height:1.7;">شكراً ${escHtml(name)}،<br/>سيتواصل معك عبدالله مساعد عبر واتساب قريباً.</div>
-    </div>`;
+  const cartItemsList = document.getElementById('cart-items-list');
+  const cartEmpty = document.getElementById('cart-empty');
+
+  // Hide items and empty msg, show success overlay
+  if (cartItemsList) cartItemsList.style.display = 'none';
+  if (cartEmpty) cartEmpty.style.display = 'none';
   if (cartFooter) cartFooter.style.display = 'none';
 
-  // Clear cart after 3s
+  // Add success message as a new element (not replacing innerHTML)
+  const successDiv = document.createElement('div');
+  successDiv.id = 'cart-success-msg';
+  successDiv.style.cssText = 'text-align:center;padding:3rem 1rem;';
+  successDiv.innerHTML = `
+    <div style="width:72px;height:72px;background:#E1F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:36px;">✓</div>
+    <div style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px;">تم إرسال طلبك!</div>
+    <div style="font-size:14px;color:#666;line-height:1.7;">شكراً ${escHtml(name)}،<br/>سيتواصل معك عبدالله مساعد عبر واتساب قريباً.</div>`;
+  if (cartBody) cartBody.appendChild(successDiv);
+
+  // Clear cart after 3s and restore structure
   setTimeout(() => {
     CART = [];
     cartSave();
+    // Remove success message
+    const msg = document.getElementById('cart-success-msg');
+    if (msg) msg.remove();
+    // Restore items list and empty
+    if (cartItemsList) cartItemsList.style.display = '';
+    if (cartEmpty) cartEmpty.style.display = '';
     cartUpdateUI();
-    const bodyEl = document.getElementById('cart-body');
-    if (bodyEl) {
-      bodyEl.innerHTML = `
-        <div class="cart-empty" id="cart-empty">
-          <div class="cart-empty-icon">🛒</div>
-          <p>سلتك فارغة<br/>أضف منتجات لتبدأ طلبك</p>
-        </div>
-        <div id="cart-items-list"></div>`;
-    }
     closeCart();
   }, 3000);
 }
