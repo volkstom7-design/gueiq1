@@ -95,6 +95,26 @@
     .close-btn { float: left; background: #f0f0f0; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px; color: #666; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; }
     .close-btn:hover { color: #111; }
 
+    /* ===== COURSE: ORDER NOW BUTTON ===== */
+    .btn-order-now { width: 100%; padding: 13px; background: #1D9E75; color: #fff; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+    .btn-order-now:hover { background: #158a62; }
+    .btn-order-now svg { width: 18px; height: 18px; }
+
+    /* ===== COURSE: PAYMENT INSTRUCTIONS ===== */
+    .payment-instructions { background: #FFF8EC; border: 1px solid #F3DBA8; border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; }
+    .payment-instructions-title { font-size: 14px; font-weight: 700; color: #8A5A00; margin-bottom: 8px; }
+    .payment-master-row { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px dashed #E0B95C; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; }
+    .payment-master-label { font-size: 13px; color: #666; font-weight: 500; }
+    .payment-master-num { font-size: 16px; font-weight: 800; color: #111; letter-spacing: 0.5px; direction: ltr; }
+    .payment-instructions-note { font-size: 12.5px; color: #8A5A00; line-height: 1.7; }
+
+    /* ===== COURSE: ORDER FORM EXTRAS ===== */
+    .req-star { color: #D85A30; }
+    .upload-proof-btn { width: 100%; padding: 11px; background: #fff; color: #1D9E75; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; border: 1.5px dashed #1D9E75; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+    .upload-proof-btn:hover { background: #E1F5EE; }
+    .upload-proof-btn:disabled { opacity: 0.7; cursor: default; }
+    .field-error { color: #D85A30; font-size: 11.5px; margin-top: 4px; }
+
     /* ===== ADMIN BUTTON ===== */
     .admin-fab { position: fixed; bottom: 24px; left: 24px; width: 44px; height: 44px; background: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 50; border: none; transition: transform 0.2s; }
     .admin-fab:hover { transform: scale(1.08); }
@@ -529,6 +549,15 @@
     body.dark .form-group textarea::placeholder { color: #555; }
     body.dark .order-input { background: #111; border-color: #333; color: #f0f0f0; }
     body.dark .order-input::placeholder { color: #555; }
+
+    body.dark .payment-instructions { background: #2a2008; border-color: #5c4a1a; }
+    body.dark .payment-instructions-title { color: #f0b429; }
+    body.dark .payment-master-row { background: #1a1a1a; border-color: #5c4a1a; }
+    body.dark .payment-master-label { color: #aaa; }
+    body.dark .payment-master-num { color: #f0f0f0; }
+    body.dark .payment-instructions-note { color: #d4a847; }
+    body.dark .upload-proof-btn { background: #111; border-color: #1D9E75; }
+    body.dark .upload-proof-btn:hover { background: #0d3028; }
 
     body.dark .guide-section { background: #111; border-color: #2a2a2a; }
     body.dark .guide-label { background: #0d3028; color: #1D9E75; }
@@ -1834,8 +1863,130 @@ function openCourse(id) {
     <div class="modal-desc">${c.desc}</div>
     <div style="margin-bottom:1.25rem;">${feats}</div>
     ${c.price ? `<div style="font-size:16px;font-weight:700;color:#1D9E75;margin-bottom:1rem;">السعر: ${c.price}</div>` : ''}
-    ${buildOrderForm('التسجيل في: ' + c.title, c.price||'', c.id)}`;
+    <button class="btn-order-now" onclick="openCourseOrder('${(c.id||'').replace(/'/g,"\\'")}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+      اطلب الآن
+    </button>`;
   document.getElementById('modal-backdrop').classList.add('open');
+}
+
+// ===== COURSE ORDER FORM (no cart / no quantity — courses only) =====
+let _courseOrderState = { courseId: '', courseTitle: '', proofUrl: '' };
+
+function openCourseOrder(id) {
+  const c = DATA.courses.find(x => x.id === id);
+  if (!c) return;
+  _courseOrderState = { courseId: c.id, courseTitle: c.title, proofUrl: '' };
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-badge-orange">طلب التسجيل</div>
+    <div class="modal-title">${c.title}</div>
+
+    <div class="payment-instructions">
+      <div class="payment-instructions-title">📌 تعليمات الدفع</div>
+      <div class="payment-master-row">
+        <span class="payment-master-label">رقم الماستر:</span>
+        <span class="payment-master-num">7136610164</span>
+      </div>
+      <div class="payment-instructions-note">بعد إكمال التحويل، يرجى رفع صورة واضحة لإيصال التحويل وإدخال الاسم الثلاثي ورقم الهاتف.</div>
+    </div>
+
+    <div class="order-form" id="course-order-form">
+      <h3>📝 معلومات الطلب</h3>
+
+      <div class="form-group">
+        <label>الاسم الثلاثي <span class="req-star">*</span></label>
+        <input type="text" id="co-name" placeholder="مثال: أحمد محمد علي" />
+      </div>
+
+      <div class="form-group">
+        <label>رقم الهاتف <span class="req-star">*</span></label>
+        <input type="tel" id="co-phone" placeholder="07xxxxxxxxx" />
+      </div>
+
+      <div class="form-group">
+        <label>صورة التحويل <span class="req-star">*</span></label>
+        <input type="file" id="co-proof-file" accept="image/*" style="display:none;" onchange="handleCourseProofUpload(event)" />
+        <button type="button" class="upload-proof-btn" id="co-upload-btn" onclick="document.getElementById('co-proof-file').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          رفع صورة التحويل
+        </button>
+        <div id="co-proof-preview" style="display:none;margin-top:8px;">
+          <img id="co-proof-img" src="" alt="معاينة صورة التحويل" style="max-width:160px;max-height:160px;border-radius:10px;border:1px solid #ddd;display:block;" />
+        </div>
+        <div id="co-proof-error" class="field-error" style="display:none;">يرجى رفع صورة التحويل</div>
+      </div>
+
+      <div id="co-form-error" class="field-error" style="display:none;text-align:center;margin-top:6px;">يرجى تعبئة جميع الحقول الإجبارية</div>
+
+      <button class="btn-order" id="co-submit-btn" onclick="submitCourseOrder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+        إرسال الطلب
+      </button>
+    </div>`;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+async function handleCourseProofUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const btn = document.getElementById('co-upload-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '⏳ جاري الرفع...'; }
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.secure_url) {
+      _courseOrderState.proofUrl = data.secure_url;
+      const previewWrap = document.getElementById('co-proof-preview');
+      const previewImg = document.getElementById('co-proof-img');
+      if (previewWrap && previewImg) {
+        previewImg.src = data.secure_url;
+        previewWrap.style.display = 'block';
+      }
+      const errEl = document.getElementById('co-proof-error');
+      if (errEl) errEl.style.display = 'none';
+    } else {
+      alert('❌ فشل رفع الصورة: ' + (data.error?.message || 'خطأ غير معروف'));
+    }
+  } catch (err) {
+    alert('❌ خطأ في الاتصال، يرجى المحاولة مجدداً');
+  }
+  if (btn) { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع صورة التحويل'; }
+}
+
+function submitCourseOrder() {
+  const nameEl = document.getElementById('co-name');
+  const phoneEl = document.getElementById('co-phone');
+  const name = (nameEl?.value || '').trim();
+  const phone = (phoneEl?.value || '').trim();
+  const proofUrl = _courseOrderState.proofUrl;
+
+  let valid = true;
+  if (!name) { nameEl.style.borderColor = '#D85A30'; valid = false; } else { nameEl.style.borderColor = ''; }
+  if (!phone) { phoneEl.style.borderColor = '#D85A30'; valid = false; } else { phoneEl.style.borderColor = ''; }
+  const proofErrEl = document.getElementById('co-proof-error');
+  if (!proofUrl) { if (proofErrEl) proofErrEl.style.display = 'block'; valid = false; } else if (proofErrEl) { proofErrEl.style.display = 'none'; }
+
+  const formErrEl = document.getElementById('co-form-error');
+  if (!valid) { if (formErrEl) formErrEl.style.display = 'block'; return; }
+  if (formErrEl) formErrEl.style.display = 'none';
+
+  // Send order details via WhatsApp (course title, name, phone, proof image link)
+  const text = `📚 طلب تسجيل في دورة\n${'─'.repeat(28)}\n🎓 الدورة: ${_courseOrderState.courseTitle}\n👤 الاسم الثلاثي: ${name}\n📞 رقم الهاتف: ${phone}\n🧾 صورة التحويل: ${proofUrl}\n${'─'.repeat(28)}`;
+  window.open(`https://wa.me/${DATA.profile.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
+
+  document.getElementById('modal-content').innerHTML = `
+    <div style="text-align:center;padding:2.5rem 1rem;">
+      <div style="width:72px;height:72px;background:#E1F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:36px;">✓</div>
+      <div style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px;">تم استلام طلبك بنجاح، وسيتم مراجعة التحويل والتواصل معك قريباً.</div>
+    </div>`;
 }
 
 // ===== ORDER FORM — replaced with Add-to-Cart =====
