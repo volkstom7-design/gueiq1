@@ -1873,12 +1873,12 @@ function openCourse(id) {
 }
 
 // ===== COURSE ORDER FORM (no cart / no quantity — courses only) =====
-let _courseOrderState = { courseId: '', courseTitle: '', proofUrl: '' };
+let _courseOrderState = { courseId: '', courseTitle: '', proofFile: null, proofObjectUrl: '' };
 
 function openCourseOrder(id) {
   const c = DATA.courses.find(x => x.id === id);
   if (!c) return;
-  _courseOrderState = { courseId: c.id, courseTitle: c.title, proofUrl: '' };
+  _courseOrderState = { courseId: c.id, courseTitle: c.title, proofFile: null, proofObjectUrl: '' };
 
   document.getElementById('modal-content').innerHTML = `
     <div class="modal-badge-orange">طلب التسجيل</div>
@@ -1931,34 +1931,45 @@ function openCourseOrder(id) {
   document.getElementById('modal-backdrop').classList.add('open');
 }
 
-async function handleCourseProofUpload(e) {
+function handleCourseProofUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
-  const btn = document.getElementById('co-upload-btn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '⏳ جاري الرفع...'; }
-  try {
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: fd });
-    const data = await res.json();
-    if (data.secure_url) {
-      _courseOrderState.proofUrl = data.secure_url;
-      const previewWrap = document.getElementById('co-proof-preview');
-      const previewImg = document.getElementById('co-proof-img');
-      if (previewWrap && previewImg) {
-        previewImg.src = data.secure_url;
-        previewWrap.style.display = 'block';
-      }
-      const errEl = document.getElementById('co-proof-error');
-      if (errEl) errEl.style.display = 'none';
-    } else {
-      alert('❌ فشل رفع الصورة: ' + (data.error?.message || 'خطأ غير معروف'));
-    }
-  } catch (err) {
-    alert('❌ خطأ في الاتصال، يرجى المحاولة مجدداً');
+
+  // Keep the raw file + a local object URL so we can trigger a real download later.
+  // No upload to any external service (Cloudinary) — kept fully local for course orders.
+  _courseOrderState.proofFile = file;
+  _courseOrderState.proofObjectUrl = URL.createObjectURL(file);
+
+  // Show preview immediately from the local file
+  const previewWrap = document.getElementById('co-proof-preview');
+  const previewImg = document.getElementById('co-proof-img');
+  if (previewWrap && previewImg) {
+    previewImg.src = _courseOrderState.proofObjectUrl;
+    previewWrap.style.display = 'block';
   }
-  if (btn) { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> رفع صورة التحويل'; }
+  const errEl = document.getElementById('co-proof-error');
+  if (errEl) errEl.style.display = 'none';
+}
+
+
+function downloadCourseProofFile() {
+  const file = _courseOrderState.proofFile;
+  const objUrl = _courseOrderState.proofObjectUrl;
+  if (!file || !objUrl) return null;
+
+  // Build a friendly file name: receipt_<course>_<name>.jpg/png
+  const extMatch = (file.name || '').match(/\.[a-zA-Z0-9]+$/);
+  const ext = extMatch ? extMatch[0] : '.jpg';
+  const safeCourse = (_courseOrderState.courseTitle || 'دورة').replace(/[^\u0600-\u06FFa-zA-Z0-9]+/g, '_').slice(0, 30);
+  const fileName = `ايصال_${safeCourse}${ext}`;
+
+  const a = document.createElement('a');
+  a.href = objUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  return fileName;
 }
 
 function submitCourseOrder() {
@@ -1966,26 +1977,30 @@ function submitCourseOrder() {
   const phoneEl = document.getElementById('co-phone');
   const name = (nameEl?.value || '').trim();
   const phone = (phoneEl?.value || '').trim();
-  const proofUrl = _courseOrderState.proofUrl;
+  const hasProof = !!_courseOrderState.proofFile;
 
   let valid = true;
   if (!name) { nameEl.style.borderColor = '#D85A30'; valid = false; } else { nameEl.style.borderColor = ''; }
   if (!phone) { phoneEl.style.borderColor = '#D85A30'; valid = false; } else { phoneEl.style.borderColor = ''; }
   const proofErrEl = document.getElementById('co-proof-error');
-  if (!proofUrl) { if (proofErrEl) proofErrEl.style.display = 'block'; valid = false; } else if (proofErrEl) { proofErrEl.style.display = 'none'; }
+  if (!hasProof) { if (proofErrEl) proofErrEl.style.display = 'block'; valid = false; } else if (proofErrEl) { proofErrEl.style.display = 'none'; }
 
   const formErrEl = document.getElementById('co-form-error');
   if (!valid) { if (formErrEl) formErrEl.style.display = 'block'; return; }
   if (formErrEl) formErrEl.style.display = 'none';
 
-  // Send order details via WhatsApp (course title, name, phone, proof image link)
-  const text = `📚 طلب تسجيل في دورة\n${'─'.repeat(28)}\n🎓 الدورة: ${_courseOrderState.courseTitle}\n👤 الاسم الثلاثي: ${name}\n📞 رقم الهاتف: ${phone}\n🧾 صورة التحويل: ${proofUrl}\n${'─'.repeat(28)}`;
+  // 1) Download the proof image to the visitor's device as an actual JPG/PNG file
+  const fileName = downloadCourseProofFile();
+
+  // 2) Open WhatsApp with a ready message asking them to attach the downloaded image manually
+  const text = `📚 طلب تسجيل في دورة\n${'─'.repeat(28)}\n🎓 الدورة: ${_courseOrderState.courseTitle}\n👤 الاسم الثلاثي: ${name}\n📞 رقم الهاتف: ${phone}\n${'─'.repeat(28)}\n📎 يرجى إرفاق صورة إيصال التحويل التي تم تحميلها الآن${fileName ? ` (${fileName})` : ''} مع هذه الرسالة.`;
   window.open(`https://wa.me/${DATA.profile.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
 
   document.getElementById('modal-content').innerHTML = `
     <div style="text-align:center;padding:2.5rem 1rem;">
       <div style="width:72px;height:72px;background:#E1F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:36px;">✓</div>
       <div style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px;">تم استلام طلبك بنجاح، وسيتم مراجعة التحويل والتواصل معك قريباً.</div>
+      <div style="font-size:13px;color:#888;line-height:1.8;margin-top:10px;">تم تحميل صورة الإيصال على جهازك — يرجى إرفاقها يدوياً في محادثة واتساب التي فُتحت لإكمال الطلب.</div>
     </div>`;
 }
 
